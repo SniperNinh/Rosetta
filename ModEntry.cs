@@ -51,7 +51,7 @@ internal class ModEntry : SimpleMod
         
     ];
     private static List<Type> RossetaBossArtifacts = [
-        typeof(Lexicon)
+        typeof(CrystalPouch)
     ];
     private static IEnumerable<Type> RossetaArtifactTypes =
         RossetaCommonArtifacts

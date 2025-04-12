@@ -9,11 +9,12 @@ namespace Rosseta.Artifacts;
  * In these cases, they are instead checked at the site of usage.
  * Lexicon is used in AGainPonder.GetNextUpgrade
  */
-public class Lexicon : Artifact, IRegisterable
+public class CrystalPouch : Artifact, IRegisterable
 {
     private static Spr _sprA;
     private static Spr _sprB;
-
+    
+    public int counter;
     public Upgrade Upgrade = Upgrade.A;
     
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
