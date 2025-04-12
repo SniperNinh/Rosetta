@@ -1,0 +1,15 @@
+{
+  "UniqueName": "Sniperninh.Rosseta",
+  "Version": "0.0.1",
+  "Author": "Sniperninh",
+  "Description": "A mod for the character Rosetta, the unofficial sister to Books",
+  "RequiredApiVersion": "1.5.7",
+  "EntryPointAssembly": "Rosseta.dll",
+  "LoadPhase": "AfterDbInit",
+  "Dependencies": [
+    {
+      "UniqueName": "Shockah.Kokoro",
+      "Version": "1.12.1"
+    }
+  ]
+}
