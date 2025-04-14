@@ -10,6 +10,7 @@ using Rosseta.Artifacts;
 using Rosseta.Cards;
 using Rosseta.External;
 using Rosseta.Features;
+using Rosseta.StatusManagers;
 
 namespace Rosseta;
 
@@ -19,8 +20,10 @@ internal class ModEntry : SimpleMod
     internal Harmony Harmony;
     internal IKokoroApi.IV2 KokoroApi;
     internal IDeckEntry RossetaDeck;
-    internal IStatusEntry KnowledgeStatus;
-    internal IStatusEntry LessonStatus;
+    internal IStatusEntry Mana;
+    internal IStatusEntry ManaSpill;
+    internal IStatusEntry ManaMax;
+    internal IStatusEntry Stir;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
 
@@ -48,10 +51,14 @@ internal class ModEntry : SimpleMod
             .Concat(RossetaSpecialCardTypes);
 
     private static List<Type> RossetaCommonArtifacts = [
-        
+        typeof(Broom),
+        typeof(ManaShelf),
+        typeof(BookShelf)
     ];
     private static List<Type> RossetaBossArtifacts = [
-        typeof(CrystalPouch)
+        typeof(Cauldron),
+        typeof(SpellBook),
+        typeof(SpellScroll)
     ];
     private static IEnumerable<Type> RossetaArtifactTypes =
         RossetaCommonArtifacts
@@ -163,7 +170,7 @@ internal class ModEntry : SimpleMod
          * Statuses are used to achieve many mechanics.
          * However, statuses themselves do not contain any code - they just keep track of how much you have.
          */
-        KnowledgeStatus = helper.Content.Statuses.RegisterStatus("Knowledge", new StatusConfiguration
+        Mana = helper.Content.Statuses.RegisterStatus("Mana", new StatusConfiguration
         {
             Definition = new StatusDef
             {
@@ -172,10 +179,11 @@ internal class ModEntry : SimpleMod
                 color = new Color("fbb954"),
                 icon = RegisterSprite(package, "assets/knowledge.png").Sprite
             },
-            Name = AnyLocalizations.Bind(["status", "knowledge", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "knowledge", "desc"]).Localize
+            Name = AnyLocalizations.Bind(["status", "Mana", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "Mana", "desc"]).Localize
         });
-        LessonStatus = helper.Content.Statuses.RegisterStatus("Lesson", new StatusConfiguration
+        
+        ManaSpill = helper.Content.Statuses.RegisterStatus("ManaSpill", new StatusConfiguration
         {
             Definition = new StatusDef
             {
@@ -184,29 +192,41 @@ internal class ModEntry : SimpleMod
                 color = new Color("c7dcd0"),
                 icon = RegisterSprite(package, "assets/lesson.png").Sprite
             },
-            Name = AnyLocalizations.Bind(["status", "lesson", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "lesson", "desc"]).Localize
+            Name = AnyLocalizations.Bind(["status", "ManaSpill", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "ManaSpill", "desc"]).Localize
         });
-
+        
+        Stir = helper.Content.Statuses.RegisterStatus("Stir", new StatusConfiguration
+        {
+            Definition = new StatusDef
+            {
+                isGood = true,
+                affectedByTimestop = false,
+                color = new Color("c7dcd0"),
+                icon = RegisterSprite(package, "assets/lesson.png").Sprite
+            },
+            Name = AnyLocalizations.Bind(["status", "Stir", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "Stir", "desc"]).Localize
+        });
+        
+        ManaMax = helper.Content.Statuses.RegisterStatus("ManaMax", new StatusConfiguration
+        {
+            Definition = new StatusDef
+            {
+                isGood = true,
+                affectedByTimestop = false,
+                color = new Color("c7dcd0"),
+                icon = RegisterSprite(package, "assets/lesson.png").Sprite
+            },
+            Name = AnyLocalizations.Bind(["status", "ManaMax", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "ManaMax", "desc"]).Localize
+        });
         /*
          * Managers are typically made to register themselves when constructed.
          * _ = makes the compiler not complain about the fact that you are constructing something for seemingly no reason.
          */
-        _ = new KnowledgeManager(package, helper);
-        _ = new SilentStatusManager();
-
-        /*
-         * Some classes require so little management that a manager may not be worth writing.
-         * In AGainPonder's case, it is simply a need for two sprites and evaluation of an artifact's effect.
-         */
-        
-        /*
-         * AGainPonder.DrawSpr = RegisterSprite(package, "assets/ponder_draw.png").Sprite;
-         * AGainPonder.DiscardSpr = RegisterSprite(package, "assets/ponder_discard.png").Sprite;
-         * 
-         * AOverthink.Spr = RegisterSprite(package, "assets/overthink.png").Sprite;
-         */
-        
+        _ = new ManaManager(package, helper);
+        _ = new StatusController();
     }
 
     /*

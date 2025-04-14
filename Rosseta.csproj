@@ -14,6 +14,13 @@
 		<GameDllPath>$(MSBuildProjectDirectory)\..\..\..\Decompiled\CobaltCore.dll</GameDllPath>
 		-->
 	</PropertyGroup>
+	<!--To tell the mod where the modloader is you need to make a file named "Configuration.props.user" with the following lines:
+	<Project>
+		<PropertyGroup>
+			<ModLoaderPath>C:\Path\To\Nickel</ModLoaderPath>
+		</PropertyGroup>
+	</Project>
+	-->
 	<Import Project="Configuration.props.user" Condition="Exists('Configuration.props.user')" />
 	<ItemGroup>
 		<PackageReference Include="Nickel.ModBuildConfig" Version="2.0.2" />
@@ -24,5 +31,8 @@
 	<ItemGroup>
 	  <Folder Include="Actions\" />
 	  <Folder Include="assets\Card\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="Configuration.props.user" />
 	</ItemGroup>
 </Project>

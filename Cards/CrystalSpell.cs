@@ -25,11 +25,27 @@ public class CrystalSpell : Card, IRegisterable
 
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        var shot = new AAttack
+        List<CardAction> actions = new List<CardAction>()
         {
-            damage = s.ship.Get(Status.shard) * s.ship.Get(Status.maxShard)
+            new AStatus()
+            {
+                targetPlayer = true,
+                status = Status.shard,
+                statusAmount = (s.ship.Get(Status.shard) * -1)
+            }
         };
-        return [shot];
+        for (int index = 0; index < s.ship.Get(Status.shard); ++index)
+        {
+            List<CardAction> cardActionList = actions;
+            AAttack shot = new AAttack()
+            {
+                damage = s.ship.Get(Status.maxShard),
+                omitFromTooltips = true
+            };
+            
+            cardActionList.Add(shot);
+        }
+        return actions;
     }
 
     public override CardData GetData(State state)

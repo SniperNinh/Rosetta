@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -6,14 +6,15 @@ using Rosseta.External;
 using HarmonyLib;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Artifacts;
 
 namespace Rosseta.Features;
 
-public class KnowledgeManager : IKokoroApi.IV2.IStatusRenderingApi.IHook
+public class ManaManager : IKokoroApi.IV2.IStatusRenderingApi.IHook
 {
     private static IModSoundEntry _lessonLearnedSound = null!;
     
-    public KnowledgeManager(IPluginPackage<IModManifest> package, IModHelper helper)
+    public ManaManager(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         ModEntry.Instance.KokoroApi.StatusRendering.RegisterHook(this);
         
@@ -37,11 +38,12 @@ public class KnowledgeManager : IKokoroApi.IV2.IStatusRenderingApi.IHook
      */
     public (IReadOnlyList<Color> Colors, int? BarSegmentWidth)? OverrideStatusRenderingAsBars(IKokoroApi.IV2.IStatusRenderingApi.IHook.IOverrideStatusRenderingAsBarsArgs args)
     {
-        if (args.Status != ModEntry.Instance.KnowledgeStatus.Status) return null;
+        if (args.Status != ModEntry.Instance.Mana.Status) return null;
 
         var ship = args.Ship;
-        var expected = GetKnowledgeLimit(ship);
-        var current = ship.Get(ModEntry.Instance.KnowledgeStatus.Status);
+        var s = args.State;
+        var expected = GetManaLimit(ship, s);
+        var current = ship.Get(ModEntry.Instance.Mana.Status);
 
         var filled = Math.Min(expected, current);
         var empty = Math.Max(expected - current, 0);
@@ -62,38 +64,24 @@ public class KnowledgeManager : IKokoroApi.IV2.IStatusRenderingApi.IHook
      */
     public static void AStatus_Begin_Postfix(AStatus __instance, State s, Combat c)
     {
-        if (__instance.status != ModEntry.Instance.KnowledgeStatus.Status) return;
+        if (__instance.status != ModEntry.Instance.Mana.Status) return;
         
         var ship = __instance.targetPlayer ? s.ship : c.otherShip;
-        if (ship.Get(ModEntry.Instance.KnowledgeStatus.Status) < GetKnowledgeLimit(ship)) return;
+        if (ship.Get(ModEntry.Instance.Mana.Status) <= GetManaLimit(ship, s)) return;
         
         c.QueueImmediate([
             new AStatus
             {
-                status = Status.powerdrive,
-                statusAmount = 1,
-                targetPlayer = __instance.targetPlayer,
-                timer = 0
-            }.Silent(),
-            new AStatus
-            {
-                status = ModEntry.Instance.LessonStatus.Status,
-                statusAmount = 1,
-                targetPlayer = __instance.targetPlayer,
-                timer = 0
-            }.Silent(),
-            new AStatus
-            {
-                status = ModEntry.Instance.KnowledgeStatus.Status,
-                statusAmount = -GetKnowledgeLimit(ship),
+                status = ModEntry.Instance.Mana.Status,
+                statusAmount = GetManaLimit(ship, s),
                 targetPlayer = __instance.targetPlayer
-            }.Silent()
+            }
         ]);
         _lessonLearnedSound.CreateInstance();
     }
 
-    public static int GetKnowledgeLimit(Ship ship)
+    public static int GetManaLimit(Ship ship, State s)
     {
-        return 3 + ship.Get(ModEntry.Instance.LessonStatus.Status);
+        return 10 + ship.Get(ModEntry.Instance.ManaMax.Status) - ship.Get(ModEntry.Instance.Stir.Status) - (s.EnumerateAllArtifacts().Contains(new ManaShelf()) ? 4 : 0);
     }
 }

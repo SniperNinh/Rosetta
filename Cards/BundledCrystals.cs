@@ -30,7 +30,6 @@ public class BundledCrystals : Card, IRegisterable
     {
         return
         [
-            
             new AAddCard
             {
                 destination = CardDestination.Deck,
