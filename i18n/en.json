@@ -19,6 +19,10 @@
         "Stir": {
             "name": "Stir",
             "desc": "Increase the limit of <c=status>KNOWLEDGE</c> by {0}."
+        },
+        "BasicStatus": {
+            "name": "BasicStatus",
+            "desc": "increases by one when you overheat, does nothing"
         }
     },
     "action": {

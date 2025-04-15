@@ -7,7 +7,7 @@ using Rosseta.External;
 
 namespace Rosseta.StatusManagers;
 
-internal sealed class ManaManager : IRegisterable
+internal sealed class ManaSpillManager : IRegisterable
 {
     internal static IStatusEntry ManaStatus { get; private set; } = null!;
 

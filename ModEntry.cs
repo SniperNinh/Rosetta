@@ -9,7 +9,6 @@ using System.Linq;
 using Rosseta.Artifacts;
 using Rosseta.Cards;
 using Rosseta.External;
-using Rosseta.Features;
 using Rosseta.StatusManagers;
 
 namespace Rosseta;
@@ -63,11 +62,13 @@ internal class ModEntry : SimpleMod
     private static IEnumerable<Type> RossetaArtifactTypes =
         RossetaCommonArtifacts
             .Concat(RossetaBossArtifacts);
-
-    private static IEnumerable<Type> AllRegisterableTypes =
-        RossetaCardTypes
-            .Concat(RossetaArtifactTypes);
-
+    
+    private static IEnumerable<Type> AllRegisterableTypes = [
+        .. RossetaCardTypes,
+        .. RossetaArtifactTypes,
+        typeof(BasicStatusManager)
+    ];
+    
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
         Instance = this;
@@ -225,8 +226,7 @@ internal class ModEntry : SimpleMod
          * Managers are typically made to register themselves when constructed.
          * _ = makes the compiler not complain about the fact that you are constructing something for seemingly no reason.
          */
-        _ = new ManaManager(package, helper);
-        _ = new StatusController();
+        _ = new ManaManager();
     }
 
     /*
