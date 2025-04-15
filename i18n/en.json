@@ -8,21 +8,21 @@
             "name": "Mana",
             "desc": "Base limit of 3. When reaching the limit, spend the required <c=status>KNOWLEDGE</c> to gain 1 <c=status>POWERDRIVE</c> and 1 <c=status>LESSON</c>. Excess <c=status>KNOWLEDGE</c> is not lost."
         },
+        "BasicStatus": {
+            "name": "Basic Status",
+            "desc": "increases by one when you overheat, does nothing"
+        },
         "ManaSpill": {
-            "name": "ManaSpill",
+            "name": "Mana Spill",
             "desc": "Increase the limit of <c=status>KNOWLEDGE</c> by {0}."
         },
         "ManaMax": {
-            "name": "ManaMax",
+            "name": "Mana Max",
             "desc": "Base limit of 3. When reaching the limit, spend the required <c=status>KNOWLEDGE</c> to gain 1 <c=status>POWERDRIVE</c> and 1 <c=status>LESSON</c>. Excess <c=status>KNOWLEDGE</c> is not lost."
         },
         "Stir": {
             "name": "Stir",
             "desc": "Increase the limit of <c=status>KNOWLEDGE</c> by {0}."
-        },
-        "BasicStatus": {
-            "name": "BasicStatus",
-            "desc": "increases by one when you overheat, does nothing"
         }
     },
     "action": {
