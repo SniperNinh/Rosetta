@@ -19,10 +19,6 @@ internal class ModEntry : SimpleMod
     internal Harmony Harmony;
     internal IKokoroApi.IV2 KokoroApi;
     internal IDeckEntry RossetaDeck;
-    internal IStatusEntry Mana;
-    internal IStatusEntry ManaSpill;
-    internal IStatusEntry ManaMax;
-    internal IStatusEntry Stir;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
 
@@ -66,7 +62,11 @@ internal class ModEntry : SimpleMod
     private static IEnumerable<Type> AllRegisterableTypes = [
         .. RossetaCardTypes,
         .. RossetaArtifactTypes,
-        typeof(BasicStatusManager)
+        typeof(BasicStatusManager),
+        typeof(ManaStatusManager),
+        typeof(ManaSpillStatusManager),
+        typeof(ManaMaxStatusManager),
+        typeof(StirStatusManager)
     ];
     
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
@@ -166,67 +166,6 @@ internal class ModEntry : SimpleMod
             },
             Description = AnyLocalizations.Bind(["character", "desc"]).Localize
         });
-
-        /*
-         * Statuses are used to achieve many mechanics.
-         * However, statuses themselves do not contain any code - they just keep track of how much you have.
-         */
-        Mana = helper.Content.Statuses.RegisterStatus("Mana", new StatusConfiguration
-        {
-            Definition = new StatusDef
-            {
-                isGood = true,
-                affectedByTimestop = false,
-                color = new Color("fbb954"),
-                icon = RegisterSprite(package, "assets/knowledge.png").Sprite
-            },
-            Name = AnyLocalizations.Bind(["status", "Mana", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "Mana", "desc"]).Localize
-        });
-        
-        ManaSpill = helper.Content.Statuses.RegisterStatus("ManaSpill", new StatusConfiguration
-        {
-            Definition = new StatusDef
-            {
-                isGood = true,
-                affectedByTimestop = false,
-                color = new Color("c7dcd0"),
-                icon = RegisterSprite(package, "assets/lesson.png").Sprite
-            },
-            Name = AnyLocalizations.Bind(["status", "ManaSpill", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "ManaSpill", "desc"]).Localize
-        });
-        
-        Stir = helper.Content.Statuses.RegisterStatus("Stir", new StatusConfiguration
-        {
-            Definition = new StatusDef
-            {
-                isGood = true,
-                affectedByTimestop = false,
-                color = new Color("c7dcd0"),
-                icon = RegisterSprite(package, "assets/lesson.png").Sprite
-            },
-            Name = AnyLocalizations.Bind(["status", "Stir", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "Stir", "desc"]).Localize
-        });
-        
-        ManaMax = helper.Content.Statuses.RegisterStatus("ManaMax", new StatusConfiguration
-        {
-            Definition = new StatusDef
-            {
-                isGood = true,
-                affectedByTimestop = false,
-                color = new Color("c7dcd0"),
-                icon = RegisterSprite(package, "assets/lesson.png").Sprite
-            },
-            Name = AnyLocalizations.Bind(["status", "ManaMax", "name"]).Localize,
-            Description = AnyLocalizations.Bind(["status", "ManaMax", "desc"]).Localize
-        });
-        /*
-         * Managers are typically made to register themselves when constructed.
-         * _ = makes the compiler not complain about the fact that you are constructing something for seemingly no reason.
-         */
-        _ = new ManaManager();
     }
 
     /*

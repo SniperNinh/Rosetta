@@ -1,7 +1,6 @@
 using HarmonyLib;
 using Nanoray.PluginManager;
 using Nickel;
-using System;
 using System.Reflection;
 using Rosseta.External;
 
@@ -13,22 +12,20 @@ internal sealed class BasicStatusManager : IRegisterable
 
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
-    BasicStatus = ModEntry.Instance.Helper.Content.Statuses.RegisterStatus("BasicStatus", new()
+    BasicStatus = ModEntry.Instance.Helper.Content.Statuses.RegisterStatus("BasicStatus", new StatusConfiguration
         {
-            Definition = new()
+            Definition = new StatusDef
             {
-                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png")).Sprite,
-                color = new("23EEB6"),
                 isGood = true,
                 affectedByTimestop = true,
+                color = new("23EEB6"),
+                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png")).Sprite,
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["status", "BasicStatus", "name"]).Localize,
-            Description = ModEntry.Instance.AnyLocalizations.Bind(["status", "BasicStatus", "description"]).Localize
+            Description = ModEntry.Instance.AnyLocalizations.Bind(["status", "BasicStatus", "desc"]).Localize
         });
-
         
         ModEntry.Instance.KokoroApi.StatusLogic.RegisterHook(new StatusLogicHook());
-        
         
         ModEntry.Instance.Harmony.Patch(
             original: AccessTools.DeclaredMethod(typeof(AOverheat), nameof(AOverheat.Begin)),
@@ -40,16 +37,14 @@ internal sealed class BasicStatusManager : IRegisterable
      * This one activates when a ship overheats.
      * it checks what ship overheated and adds "BasicStatus" to the damage
      */
-    private static void AOverheat_Begin_Postfix(AOverheat __instance, State s, Combat c)
+    private static void AOverheat_Begin_Postfix(AOverheat __instance, Combat c)
     {
-        var ship = __instance.targetPlayer ? s.ship : c.otherShip;
-        var BasicStatusAmount = ship.Get(BasicStatus.Status);
         
         var action = new AStatus
         {
-            targetPlayer = !__instance.targetPlayer,
+            targetPlayer = __instance.targetPlayer,
             status = BasicStatus.Status,
-            statusAmount = BasicStatusAmount
+            statusAmount = -1
         };
         
         ModEntry.Instance.Helper.ModData.CopyAllModData(__instance, action);
@@ -57,5 +52,18 @@ internal sealed class BasicStatusManager : IRegisterable
     }
     
     private sealed class StatusLogicHook : IKokoroApi.IV2.IStatusLogicApi.IHook
-    { }
+    {
+        public bool HandleStatusTurnAutoStep(IKokoroApi.IV2.IStatusLogicApi.IHook.IHandleStatusTurnAutoStepArgs args)
+        {
+            if (args.Status != BasicStatus.Status)
+                return false;
+            if (args.Timing != IKokoroApi.IV2.IStatusLogicApi.StatusTurnTriggerTiming.TurnStart)
+                return false;
+            if (args.Amount <= 0)
+                return false;
+            
+            args.Amount++;
+            return false;
+        }
+    }
 }

@@ -35,4 +35,9 @@
 	<ItemGroup>
 	  <Content Include="Configuration.props.user" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Update="i18n\en.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
