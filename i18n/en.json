@@ -38,6 +38,14 @@
         "BundledCrystals": {
             "name": "Bundled Crystals",
             "desc": "Put 3 <c=card>Crystal Shard</c>s in your draw pile"
+        },
+        "SpellDrawTest": {
+            "name": "Spell Draw Test",
+            "desc": "draw a card from the spellbook to your hand"
+        },
+        "SpellDebugCard": {
+            "name": "Spell Debug Card",
+            "desc": "A spell for testing purposes, has no actions"
         }
     },
     "artifact": {

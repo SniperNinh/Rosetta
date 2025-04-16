@@ -3,10 +3,11 @@ using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards;
+namespace Rosseta.Cards.Spells;
 
-public class BundledCrystals : Card, IRegisterable
+public class BasicSpellCard : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -14,14 +15,16 @@ public class BundledCrystals : Card, IRegisterable
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
+            
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
             Meta = new CardMeta
             {
-                deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.rare,
+                deck = ModEntry.Instance.RossetaSpellDeck.Deck,
+                rarity = Rarity.common,
+                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BundledCrystals", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicSpellCard", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -30,12 +33,17 @@ public class BundledCrystals : Card, IRegisterable
     {
         return
         [
-            new AAddCard
-            {
-                destination = CardDestination.Deck,
-                card = new ShardCard(),
-                amount = 3
-            }
+            ModEntry.Instance.KokoroApi.ActionCosts.MakeCostAction(
+                ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
+                    ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
+                    2),
+                new AStatus
+                {
+                    status = Status.shield,
+                    statusAmount = 1,
+                    targetPlayer = true
+                }
+            ).AsCardAction
         ];
     }
 
@@ -43,9 +51,9 @@ public class BundledCrystals : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 2,
+            cost = 0,
             exhaust = true,
-            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "BundledCrystals", "desc"]))
+            temporary = true
         };
     }
 }

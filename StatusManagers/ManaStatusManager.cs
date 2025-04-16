@@ -107,6 +107,6 @@ internal sealed class ManaStatusManager : IRegisterable
     }
     public static int GetManaLimit(Ship ship, State s)
     {
-        return 10 + ship.Get(ManaMaxStatusManager.ManaMax.Status) - ship.Get(StirStatusManager.StirStatus.Status) - (s.EnumerateAllArtifacts().Contains(new ManaShelf()) ? 4 : 0);
+        return 10 + ship.Get(ManaMaxStatusManager.ManaMax.Status) - (s.EnumerateAllArtifacts().Contains(new ManaShelf()) ? 4 : 0);
     }
 }

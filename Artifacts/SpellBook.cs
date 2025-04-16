@@ -1,6 +1,11 @@
 using System.Reflection;
-using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Actions;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Nanoray.PluginManager;
 
 namespace Rosseta.Artifacts;
 
@@ -11,37 +16,113 @@ namespace Rosseta.Artifacts;
  */
 public class SpellBook : Artifact, IRegisterable
 {
+    public List<Card> LearnedFireSpells = new List<Card>();
+    public List<Card> UnLearnedFireSpells = new List<Card>();
+    public List<Card> LearnedAirSpells = new List<Card>();
+    public List<Card> UnLearnedAirSpells = new List<Card>();
+    public List<Card> LearnedIceSpells = new List<Card>();
+    public List<Card> UnLearnedIceSpells = new List<Card>();
+    public List<Card> LearnedAcidSpells = new List<Card>();
+    public List<Card> UnLearnedAcidSpells = new List<Card>();
+    public List<Card> LearnedSpecialSpells = new List<Card>();
+    public List<Card> UnLearnedSpecialSpells = new List<Card>();
+    public List<Card> DebugSpells = new List<Card>();
+    
+    
+    
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
-        helper.Content.Artifacts.RegisterArtifact(new ArtifactConfiguration
+        helper.Content.Artifacts.RegisterArtifact("SpellBook", new()
         {
             ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
-            Meta = new ArtifactMeta
+            Meta = new()
             {
+                owner = ModEntry.Instance.RossetaDeck.Deck,
                 pools = [ArtifactPool.Boss],
-                owner = ModEntry.Instance.RossetaDeck.Deck
+                unremovable = true
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "BuriedKnowledge", "name"]).Localize,
-            Description = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "BuriedKnowledge", "desc"]).Localize,
-            /*
-             * For Artifacts with just one sprite, registering them at the place of usage helps simplify things.
-             */
-            Sprite = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Ashtray.png")).Sprite
+            Sprite = helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png")).Sprite,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "SpellBook", "name"]).Localize,
+            Description = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "SpellBook", "desc"]).Localize
         });
     }
-    
-    /*
-     * Unlike Cards, Artifacts have no required methods. Implement the ones you need, and leave the rest unimplemented.
-     * By default, Artifacts have everything implemented with methods that do nothing, so there is no need to call the super.
-     */
+    public override void OnReceiveArtifact(State state)
+    {
+        LearnedFireSpells = addCards(ModEntry.RossetaStarterFireSpellCardTypes.ToList());
+        UnLearnedFireSpells = addCards(ModEntry.RossetaFireSpellCardTypes.ToList());
+        LearnedAirSpells = addCards(ModEntry.RossetaStarterAirSpellCardTypes.ToList());
+        UnLearnedAirSpells = addCards(ModEntry.RossetaAirSpellCardTypes.ToList());
+        UnLearnedIceSpells = addCards(ModEntry.RossetaIceSpellCardTypes.ToList());
+        UnLearnedAcidSpells = addCards(ModEntry.RossetaAcidSpellCardTypes.ToList());
+        UnLearnedSpecialSpells = addCards(ModEntry.RossetaSpecialSpellCardTypes.ToList());
+        DebugSpells = addCards(ModEntry.RossetaDebugSpellCardTypes.ToList());
+    }
+
     public override void OnCombatStart(State state, Combat combat)
     {
-        combat.Queue(new AStatus
-        {
-            targetPlayer = true,
-            status = Status.shield,
-            statusAmount = 5,
-            artifactPulse = Key() // This makes it so that when this action occurs, this artifact is pulsed with a white aura.
-        });
+        
+        if (LearnedFireSpells.Count <= 0)
+            LearnedFireSpells = addCards(ModEntry.RossetaFireSpellCardTypes.ToList());
+        
+        if (LearnedAirSpells.Count <= 0)
+            LearnedAirSpells = addCards(ModEntry.RossetaAirSpellCardTypes.ToList());
+        
+        if (LearnedIceSpells.Count <= 0)
+            LearnedIceSpells = addCards(ModEntry.RossetaIceSpellCardTypes.ToList());
+        
+        if (LearnedAcidSpells.Count <= 0)
+            LearnedAcidSpells = addCards(ModEntry.RossetaAcidSpellCardTypes.ToList());
+        
+        if (LearnedSpecialSpells.Count <= 0)
+            LearnedSpecialSpells = addCards(ModEntry.RossetaSpecialSpellCardTypes.ToList());
+        
+        if (UnLearnedFireSpells.Count <= 0)
+            UnLearnedFireSpells = addCards(ModEntry.RossetaFireSpellCardTypes.ToList());
+        
+        if (UnLearnedAcidSpells.Count <= 0)
+            UnLearnedAcidSpells = addCards(ModEntry.RossetaAcidSpellCardTypes.ToList());
+        
+        if (UnLearnedIceSpells.Count <= 0)
+            UnLearnedIceSpells = addCards(ModEntry.RossetaIceSpellCardTypes.ToList());
+        
+        if (UnLearnedAirSpells.Count <= 0)
+            UnLearnedAirSpells = addCards(ModEntry.RossetaAirSpellCardTypes.ToList());
+        
+        if (UnLearnedSpecialSpells.Count <= 0)
+            UnLearnedSpecialSpells = addCards(ModEntry.RossetaSpecialSpellCardTypes.ToList());
+        
+        ModEntry.Instance.Logger.LogInformation(UnLearnedAcidSpells.Count().ToString());
+        ModEntry.Instance.Logger.LogInformation(UnLearnedIceSpells.Count().ToString());
+        ModEntry.Instance.Logger.LogInformation(UnLearnedAirSpells.Count().ToString());
+        ModEntry.Instance.Logger.LogInformation(UnLearnedFireSpells.Count().ToString());
+        ModEntry.Instance.Logger.LogInformation(UnLearnedSpecialSpells.Count().ToString());
     }
-}
+
+    public override void OnCombatEnd(State state)
+    {
+        if (state.map.markers[state.map.currentLocation].contents is MapBattle mapBattle)
+        {
+            if (mapBattle.battleType == BattleType.Elite || mapBattle.battleType == BattleType.Boss)
+            {
+                state.rewardsQueue.Add(new ALearnSpell());
+            }
+        }
+    }
+
+    private List<Card> addCards(List<Type> initCards)
+    {
+        var list = new List<Card>();
+
+        foreach (var spell in initCards)
+        {
+            Card? card = (Card?)Activator.CreateInstance(spell);
+            if (card != null)
+            {
+                list.Add(card);
+            }
+        }
+
+        return list;
+    }
+    
+};

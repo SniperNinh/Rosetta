@@ -1,47 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards;
+namespace Rosseta.Cards.Spells;
 
-public class ShardShield : Card, IRegisterable
+public class SpellDebugCard : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
-    
+
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
+            
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
             Meta = new CardMeta
             {
-                deck = ModEntry.Instance.RossetaDeck.Deck,
+                deck = ModEntry.Instance.RossetaSpellDeck.Deck,
                 rarity = Rarity.common,
+                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "ShardShield", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellDebugCard", "name"]).Localize,
+            // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
 
-    /*
-     * Some cards have actions that don't just differ by number on upgrade.
-     * In these cases, a switch statement may be used.
-     * It is more verbose, but allows for precisely describing what each upgrade's actions are.
-     */
     public override List<CardAction> GetActions(State s, Combat c)
     {
         return
         [
-            new AStatus
-            {
-                status = Status.shield,
-                statusAmount = 1,
-                targetPlayer = true,
-                shardcost = 1
-            }
+            
         ];
     }
 
@@ -49,7 +41,10 @@ public class ShardShield : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 0,
+            exhaust = true,
+            temporary = true,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "SpellDebugCard", "desc"]))
         };
     }
 }

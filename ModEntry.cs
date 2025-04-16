@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using Rosseta.Artifacts;
 using Rosseta.Cards;
+using Rosseta.Cards.Rosseta;
+using Rosseta.Cards.Spells;
 using Rosseta.External;
 using Rosseta.StatusManagers;
 
@@ -18,6 +20,7 @@ internal class ModEntry : SimpleMod
     internal static ModEntry Instance { get; private set; } = null!;
     internal Harmony Harmony;
     internal IKokoroApi.IV2 KokoroApi;
+    internal IDeckEntry RossetaSpellDeck;
     internal IDeckEntry RossetaDeck;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
@@ -27,46 +30,89 @@ internal class ModEntry : SimpleMod
      * All cards and artifacts must be registered before they may be used in the game.
      * In theory only one collection could be used, containing all registrable types, but it is seperated this way for ease of organization.
      */
-    private static List<Type> RossetaCommonCardTypes = [
-        typeof(ShardShield)
+    internal static List<Type> RossetaCommonCardTypes = [
+        typeof(ShardShield),
+        typeof(BottleRepair),
+        typeof(DistilledMana),
+        typeof(Equivalence),
+        typeof(ManaFlask),
+        typeof(ManaShield),
+        typeof(SpellDrawTest)
     ];
-    private static List<Type> RossetaUncommonCardTypes = [
+    internal static List<Type> RossetaUncommonCardTypes = [
         typeof(BundledCrystals)
     ];
-    private static List<Type> RossetaRareCardTypes = [
+    internal static List<Type> RossetaRareCardTypes = [
         typeof(CrystalSpell)
     ];
-    private static List<Type> RossetaSpecialCardTypes = [
-        
+    internal static List<Type> RossetaSpecialCardTypes = [
+        typeof(ManaBottle)
     ];
-    private static IEnumerable<Type> RossetaCardTypes =
+    
+    internal static IEnumerable<Type> RossetaCardTypes =
         RossetaCommonCardTypes
             .Concat(RossetaUncommonCardTypes)
             .Concat(RossetaRareCardTypes)
             .Concat(RossetaSpecialCardTypes);
+    
+    internal static List<Type> RossetaFireSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaStarterFireSpellCardTypes = [
+        typeof(BasicSpellCard)
+    ];
+    
+    internal static List<Type> RossetaIceSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaAirSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaStarterAirSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaAcidSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaSpecialSpellCardTypes = [
+    ];
+    
+    internal static List<Type> RossetaDebugSpellCardTypes = [
+        typeof(SpellDebugCard)
+    ];
 
-    private static List<Type> RossetaCommonArtifacts = [
+    internal static IEnumerable<Type> RossetaSpellCardTypes =
+        RossetaFireSpellCardTypes
+            .Concat(RossetaStarterFireSpellCardTypes)
+            .Concat(RossetaIceSpellCardTypes)
+            .Concat(RossetaAirSpellCardTypes)
+            .Concat(RossetaStarterAirSpellCardTypes)
+            .Concat(RossetaAcidSpellCardTypes)
+            .Concat(RossetaSpecialSpellCardTypes)
+            .Concat(RossetaDebugSpellCardTypes);
+    
+    internal static List<Type> RossetaCommonArtifacts = [
         typeof(Broom),
         typeof(ManaShelf),
         typeof(BookShelf)
     ];
-    private static List<Type> RossetaBossArtifacts = [
+    internal static List<Type> RossetaBossArtifacts = [
         typeof(Cauldron),
         typeof(SpellBook),
         typeof(SpellScroll)
     ];
-    private static IEnumerable<Type> RossetaArtifactTypes =
+    internal static IEnumerable<Type> RossetaArtifactTypes =
         RossetaCommonArtifacts
             .Concat(RossetaBossArtifacts);
     
-    private static IEnumerable<Type> AllRegisterableTypes = [
+    internal static IEnumerable<Type> AllRegisterableTypes = [
         .. RossetaCardTypes,
+        .. RossetaSpellCardTypes,
         .. RossetaArtifactTypes,
         typeof(BasicStatusManager),
         typeof(ManaStatusManager),
         typeof(ManaSpillStatusManager),
-        typeof(ManaMaxStatusManager),
-        typeof(StirStatusManager)
+        typeof(ManaMaxStatusManager)
     ];
     
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
@@ -94,6 +140,24 @@ internal class ModEntry : SimpleMod
          * A character must be defined with a deck to allow the cards to be obtainable as a character's cards.
          */
         RossetaDeck = helper.Content.Decks.RegisterDeck("Rosseta", new DeckConfiguration
+        {
+            Definition = new DeckDef
+            {
+                /*
+                 * This color is used in a few places:
+                 * TODO On cards, it dictates the sheen on higher rarities, as well as influences the color of the energy cost.
+                 * If this deck is given to a playable character, their name will be this color, and their mini will have this color as their border.
+                 */
+                color = new Color("999999"),
+
+                titleColor = new Color("000000")
+            },
+
+            DefaultCardArt = StableSpr.cards_colorless,
+            BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
+            Name = AnyLocalizations.Bind(["character", "name"]).Localize
+        });
+        RossetaSpellDeck = helper.Content.Decks.RegisterDeck("RossetaSpells", new DeckConfiguration
         {
             Definition = new DeckDef
             {
@@ -162,6 +226,7 @@ internal class ModEntry : SimpleMod
                  * This can be safely removed if you have no starting artifacts.
                  */
                 artifacts = [
+                    new SpellBook()
                 ]
             },
             Description = AnyLocalizations.Bind(["character", "desc"]).Localize

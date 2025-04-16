@@ -29,10 +29,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Actions\" />
-	  <Folder Include="assets\Card\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <Content Include="Configuration.props.user" />
 	</ItemGroup>
 	<ItemGroup>
