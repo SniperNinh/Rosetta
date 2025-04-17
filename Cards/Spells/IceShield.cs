@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class BasicSpellCard : Card, IRegisterable
+public class IceShield : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -25,7 +25,7 @@ public class BasicSpellCard : Card, IRegisterable
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicSpellCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "IceShield", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }

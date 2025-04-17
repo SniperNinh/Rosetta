@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Actions;
+using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards;
+namespace Rosseta.Cards.Rosseta;
 
-public class ShardShield : Card, IRegisterable
+public class SpellSheet : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
-    
+
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -19,28 +20,23 @@ public class ShardShield : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
+                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "ShardShield", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellSheet", "name"]).Localize,
+            // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
 
-    /*
-     * Some cards have actions that don't just differ by number on upgrade.
-     * In these cases, a switch statement may be used.
-     * It is more verbose, but allows for precisely describing what each upgrade's actions are.
-     */
     public override List<CardAction> GetActions(State s, Combat c)
     {
         return
         [
-            new AStatus
+            new ACardOffering()
             {
-                status = Status.shield,
-                statusAmount = 1,
-                targetPlayer = s.ship.isPlayerShip,
-                shardcost = 1
+                amount = 1,
+                limitDeck = ModEntry.Instance.RossetaSpellDeck.Deck,
             }
         ];
     }

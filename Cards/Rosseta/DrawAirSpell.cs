@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
-using Rosseta.StatusManagers;
+using Rosseta.Actions;
+using Rosseta.Artifacts;
 
 namespace Rosseta.Cards.Rosseta;
 
-public class BasicCard : Card, IRegisterable
+public class DrawAirSpell : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -23,29 +25,33 @@ public class BasicCard : Card, IRegisterable
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DrawAirSpell", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
 
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        return
-        [
-            new AStatus()
-            {
-                status = ManaStatusManager.ManaStatus.Status,
-                statusAmount = 1,
-                targetPlayer = s.ship.isPlayerShip
-            }
-        ];
+        
+        List<CardAction> actions = new List<CardAction>();
+        if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
+            actions.Add(
+                new ASpecificCardTypeOffering()
+                {
+                    Cards = spellBook.LearnedAirSpells.Count != 0 ? spellBook.LearnedAirSpells : spellBook.DebugSpells,
+                    Destination = CardDestination.Hand
+                }
+            );
+        
+        return actions;
     }
 
     public override CardData GetData(State state)
     {
         return new CardData
         {
-            cost = 1
+            cost = 1,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "DrawAirSpell", "desc"]))
         };
     }
 }

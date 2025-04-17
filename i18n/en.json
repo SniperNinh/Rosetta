@@ -43,6 +43,22 @@
             "name": "Spell Draw Test",
             "desc": "draw a card from the spellbook to your hand"
         },
+        "DrawFireSpell": {
+            "name": "Draw Fire Spell",
+            "desc": "draw a <c=card>Fire Spell</c> from the spellbook to your hand"
+        },
+        "DrawAcidSpell": {
+            "name": "Draw Acid Spell",
+            "desc": "draw a <c=card>Acid Spell</c> from the spellbook to your hand"
+        },
+        "DrawAirSpell": {
+            "name": "Draw Air Spell",
+            "desc": "draw a <c=card>Air Spell</c> from the spellbook to your hand"
+        },
+        "DrawIceSpell": {
+            "name": "Draw Ice Spell",
+            "desc": "draw a <c=card>Ice Spell</c> from the spellbook to your hand"
+        },
         "SpellDebugCard": {
             "name": "Spell Debug Card",
             "desc": "A spell for testing purposes, has no actions"

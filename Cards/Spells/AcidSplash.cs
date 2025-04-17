@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class BasicSpellCard : Card, IRegisterable
+public class AcidSplash : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -16,16 +16,16 @@ public class BasicSpellCard : Card, IRegisterable
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
-            
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaSpellDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
+                
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicSpellCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "AcidSplash", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -37,7 +37,7 @@ public class BasicSpellCard : Card, IRegisterable
             ModEntry.Instance.KokoroApi.ActionCosts.MakeCostAction(
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
-                    3),
+                    5),
                 ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
             ).AsCardAction,
             ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
@@ -46,9 +46,9 @@ public class BasicSpellCard : Card, IRegisterable
                 triggerGuid,
                 new AStatus()
                 {
-                    status = Status.shield,
+                    status = Status.corrode,
                     statusAmount = 2,
-                    targetPlayer = s.ship.isPlayerShip
+                    targetPlayer = !s.ship.isPlayerShip
                 }).AsCardAction
         ];
     }

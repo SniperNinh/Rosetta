@@ -37,44 +37,69 @@ internal class ModEntry : SimpleMod
         typeof(Equivalence),
         typeof(ManaFlask),
         typeof(ManaShield),
-        typeof(SpellDrawTest)
+        typeof(DrawFireSpell),
+        typeof(DrawIceSpell),
+        typeof(DrawAirSpell)
     ];
     internal static List<Type> RossetaUncommonCardTypes = [
-        typeof(BundledCrystals)
+        typeof(BundledCrystals),
+        typeof(DrawAcidSpell),
+        typeof(Stir),
+        typeof(BottleThrow)
     ];
     internal static List<Type> RossetaRareCardTypes = [
-        typeof(CrystalSpell)
+        typeof(CrystalSpell),
+        typeof(DrawSpecialSpell)
     ];
     internal static List<Type> RossetaSpecialCardTypes = [
         typeof(ManaBottle)
+    ];
+    internal static List<Type> RossetaDebugCardTypes = [
+        typeof(SpellDrawTest),
+        typeof(DebugLearnAllSpells)
     ];
     
     internal static IEnumerable<Type> RossetaCardTypes =
         RossetaCommonCardTypes
             .Concat(RossetaUncommonCardTypes)
             .Concat(RossetaRareCardTypes)
-            .Concat(RossetaSpecialCardTypes);
+            .Concat(RossetaSpecialCardTypes)
+            .Concat(RossetaDebugCardTypes);
     
     internal static List<Type> RossetaFireSpellCardTypes = [
+        typeof(FireFlash),
+        typeof(FireryCrystals)
     ];
     
     internal static List<Type> RossetaStarterFireSpellCardTypes = [
-        typeof(BasicSpellCard)
+        typeof(FireBolt)
     ];
     
     internal static List<Type> RossetaIceSpellCardTypes = [
+        typeof(IceBolt),
+        typeof(ConjureIceTea),
+        typeof(IceShield)
     ];
     
     internal static List<Type> RossetaAirSpellCardTypes = [
+        typeof(ShockWave),
+        typeof(Fakeout)
     ];
     
     internal static List<Type> RossetaStarterAirSpellCardTypes = [
+        typeof(AirDash)
     ];
     
     internal static List<Type> RossetaAcidSpellCardTypes = [
+        typeof(AcidSplash),
+        typeof(DragonArmor),
+        typeof(CurePoison)
     ];
     
     internal static List<Type> RossetaSpecialSpellCardTypes = [
+        typeof(FireBall),
+        typeof(FreezeRay),
+        typeof(AirSuperDash)
     ];
     
     internal static List<Type> RossetaDebugSpellCardTypes = [

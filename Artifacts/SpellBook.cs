@@ -62,19 +62,10 @@ public class SpellBook : Artifact, IRegisterable
     {
         
         if (LearnedFireSpells.Count <= 0)
-            LearnedFireSpells = addCards(ModEntry.RossetaFireSpellCardTypes.ToList());
+            LearnedFireSpells = addCards(ModEntry.RossetaStarterFireSpellCardTypes.ToList());
         
         if (LearnedAirSpells.Count <= 0)
-            LearnedAirSpells = addCards(ModEntry.RossetaAirSpellCardTypes.ToList());
-        
-        if (LearnedIceSpells.Count <= 0)
-            LearnedIceSpells = addCards(ModEntry.RossetaIceSpellCardTypes.ToList());
-        
-        if (LearnedAcidSpells.Count <= 0)
-            LearnedAcidSpells = addCards(ModEntry.RossetaAcidSpellCardTypes.ToList());
-        
-        if (LearnedSpecialSpells.Count <= 0)
-            LearnedSpecialSpells = addCards(ModEntry.RossetaSpecialSpellCardTypes.ToList());
+            LearnedAirSpells = addCards(ModEntry.RossetaStarterAirSpellCardTypes.ToList());
         
         if (UnLearnedFireSpells.Count <= 0)
             UnLearnedFireSpells = addCards(ModEntry.RossetaFireSpellCardTypes.ToList());

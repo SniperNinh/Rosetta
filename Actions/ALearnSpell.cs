@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace Rosseta.Actions
 {
     public sealed class ALearnSpell : CardAction
@@ -53,11 +54,11 @@ namespace Rosseta.Actions
 
             return new LearnSpell
             {
-                cards = options.Select(c =>
+                cards = options.Select(C =>
                 {
-                    c.drawAnim = 1;
-                    c.flipAnim = 1;
-                    return c;
+                    C.drawAnim = 1;
+                    C.flipAnim = 1;
+                    return C;
                 }).ToList(),
                 canSkip = CanSkip,
             };
@@ -77,6 +78,7 @@ namespace Rosseta.Actions
             {
                 if (artifact is SpellBook spellBook)
                 {
+                    
                     if (ModEntry.RossetaFireSpellCardTypes.Contains(card.GetType()))
                     {
                         spellBook.LearnedFireSpells.Add(card);

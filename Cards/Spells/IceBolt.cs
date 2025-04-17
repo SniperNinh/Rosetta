@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class BasicSpellCard : Card, IRegisterable
+public class IceBolt : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -25,7 +25,7 @@ public class BasicSpellCard : Card, IRegisterable
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicSpellCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "IceBolt", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -44,11 +44,10 @@ public class BasicSpellCard : Card, IRegisterable
             (
                 IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
                 triggerGuid,
-                new AStatus()
+                new AAttack()
                 {
-                    status = Status.shield,
-                    statusAmount = 2,
-                    targetPlayer = s.ship.isPlayerShip
+                    damage = 2,
+                    shardcost = 1
                 }).AsCardAction
         ];
     }

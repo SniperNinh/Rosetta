@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class BasicSpellCard : Card, IRegisterable
+public class DragonArmor : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -21,11 +21,11 @@ public class BasicSpellCard : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaSpellDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicSpellCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DragonArmor", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -46,8 +46,8 @@ public class BasicSpellCard : Card, IRegisterable
                 triggerGuid,
                 new AStatus()
                 {
-                    status = Status.shield,
-                    statusAmount = 2,
+                    status = Status.bubbleJuice,
+                    statusAmount = 1,
                     targetPlayer = s.ship.isPlayerShip
                 }).AsCardAction
         ];
