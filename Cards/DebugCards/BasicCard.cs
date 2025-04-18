@@ -46,6 +46,7 @@ public class BasicCard : Card, IRegisterable
     {
         return new CardData
         {
+            artOverlay = ModEntry.RegisterSprite(ModEntry.Instance.Package, "assets/Border_Common_Rosseta.png").Sprite,
             cost = 1
         };
     }

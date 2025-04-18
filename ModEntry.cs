@@ -133,6 +133,8 @@ internal class ModEntry : SimpleMod
         Instance = this;
         Harmony = new Harmony("Sniperninh.Rosseta");
         
+        
+        
         ALearnSpell.ApplyPatches(Harmony);
         /*
          * Some mods provide an API, which can be requested from the ModRegistry.
@@ -168,9 +170,10 @@ internal class ModEntry : SimpleMod
             },
 
             DefaultCardArt = StableSpr.cards_colorless,
-            BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
+            BorderSprite = RegisterSprite(package, "assets/Border_Rosseta.png").Sprite,
             Name = AnyLocalizations.Bind(["character", "name"]).Localize
         });
+        
         RossetaSpellDeck = helper.Content.Decks.RegisterDeck("RossetaSpells", new DeckConfiguration
         {
             Definition = new DeckDef
@@ -184,12 +187,11 @@ internal class ModEntry : SimpleMod
 
                 titleColor = new Color("000000")
             },
-
             DefaultCardArt = StableSpr.cards_colorless,
-            BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
+            BorderSprite = RegisterSprite(package, "assets/Border_Rosseta.png").Sprite,
             Name = AnyLocalizations.Bind(["SpellDeck", "name"]).Localize
         });
-
+        
         /*
          * All the IRegisterable types placed into the static lists at the start of the class are initialized here.
          * This snippet invokes all of them, allowing them to register themselves with the package and helper.
@@ -245,7 +247,7 @@ internal class ModEntry : SimpleMod
             Description = AnyLocalizations.Bind(["character", "desc"]).Localize
         });
     }
-
+    
     /*
      * assets must also be registered before they may be used.
      * Unlike cards and artifacts, however, they are very simple to register, and often do not need to be referenced in more than one place.

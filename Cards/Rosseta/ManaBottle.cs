@@ -49,6 +49,7 @@ public class ManaBottle : Card, IRegisterable
     {
         return new CardData
         {
+            artOverlay = ModEntry.RegisterSprite(ModEntry.Instance.Package, "assets/Border_Special_Rosseta.png").Sprite,
             cost = 0,
             temporary = true
         };
