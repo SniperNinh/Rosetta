@@ -9,11 +9,11 @@ using Rosseta;
 
 namespace Rosseta.Cards.Spells;
 
-public class AirDash : SpellCard, IRegisterable
+public class AirDash : Card, IRegisterable, IAirCard, IIsStarterSpell
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
-    public static Element element = Element.AIR;
+    
     
     
     

@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class FireBolt : Card, IRegisterable
+public class FireBolt : Card, IRegisterable, IFireCard, IIsStarterSpell
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 

@@ -38,7 +38,7 @@ public class SpellDrawTest : Card, IRegisterable
             actions.Add(
                 new ASpecificCardTypeOffering()
                 {
-                    Cards = spellBook.LearnedFireSpells.Count != 0 ? spellBook.LearnedFireSpells : spellBook.DebugSpells,
+                    Cards = GetSpellTypeCardsFromSpellBook(spellBook),
                     Destination = CardDestination.Hand
                 }
             );
@@ -53,5 +53,15 @@ public class SpellDrawTest : Card, IRegisterable
             cost = 1,
             description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "SpellDrawTest", "desc"]))
         };
+    }
+    private List<Card> GetSpellTypeCardsFromSpellBook(SpellBook spellBook)
+    {
+        List<Card> elementCardList = new List<Card>();
+        foreach (var elementCard in spellBook.LearnedSpells)
+        {
+            if (elementCard is not ISpecialCard) continue;
+            elementCardList.Add(elementCard);
+        }
+        return elementCardList.Count > 0 ? elementCardList : spellBook.DebugSpells;
     }
 }

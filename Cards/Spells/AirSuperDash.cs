@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class AirSuperDash : Card, IRegisterable
+public class AirSuperDash : Card, IRegisterable, IAirCard, ISpecialCard
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -21,7 +21,7 @@ public class AirSuperDash : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaSpellDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.rare,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },

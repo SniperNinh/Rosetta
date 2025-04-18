@@ -38,7 +38,7 @@ public class DrawAcidSpell : Card, IRegisterable
             actions.Add(
                 new ASpecificCardTypeOffering()
                 {
-                    Cards = spellBook.LearnedAcidSpells.Count != 0 ? spellBook.LearnedAcidSpells : spellBook.DebugSpells,
+                    Cards = GetSpellTypeCardsFromSpellBook(spellBook),
                     Destination = CardDestination.Hand
                 }
             );
@@ -53,5 +53,16 @@ public class DrawAcidSpell : Card, IRegisterable
             cost = 1,
             description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "DrawAcidSpell", "desc"]))
         };
+    }
+    
+    private List<Card> GetSpellTypeCardsFromSpellBook(SpellBook spellBook)
+    {
+        List<Card> elementCardList = new List<Card>();
+        foreach (var elementCard in spellBook.LearnedSpells)
+        {
+            if (elementCard is not IAcidCard) continue;
+            elementCardList.Add(elementCard);
+        }
+        return elementCardList.Count > 0 ? elementCardList : spellBook.DebugSpells;
     }
 }

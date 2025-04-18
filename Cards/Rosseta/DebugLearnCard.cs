@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Rosseta;
 
-public class SpellSheet : Card, IRegisterable
+public class DebugLearnCard : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -20,11 +20,11 @@ public class SpellSheet : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.uncommon,
+                rarity = Rarity.common,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellSheet", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DebugLearnCard", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -33,10 +33,10 @@ public class SpellSheet : Card, IRegisterable
     {
         return
         [
-            new ACardOffering()
+            new ALearnSpell
             {
-                amount = 1,
-                limitDeck = ModEntry.Instance.RossetaSpellDeck.Deck,
+                Amount = 3,
+                battleType = s.map.GetCurrent().contents is MapBattle contents ? contents.battleType : BattleType.Normal
             }
         ];
     }
@@ -45,7 +45,8 @@ public class SpellSheet : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 0,
+            infinite = true
         };
     }
 }

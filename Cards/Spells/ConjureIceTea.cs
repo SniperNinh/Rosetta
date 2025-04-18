@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class ConjureIceTea : Card, IRegisterable
+public class ConjureIceTea : Card, IRegisterable, IIceCard
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -21,7 +21,7 @@ public class ConjureIceTea : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaSpellDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },

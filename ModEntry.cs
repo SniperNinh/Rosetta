@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Rosseta.Actions;
 using Rosseta.Artifacts;
 using Rosseta.Cards;
 using Rosseta.Cards.Rosseta;
@@ -45,7 +46,8 @@ internal class ModEntry : SimpleMod
         typeof(BundledCrystals),
         typeof(DrawAcidSpell),
         typeof(Stir),
-        typeof(BottleThrow)
+        typeof(BottleThrow),
+        typeof(SpellSheet)
     ];
     internal static List<Type> RossetaRareCardTypes = [
         typeof(CrystalSpell),
@@ -56,7 +58,8 @@ internal class ModEntry : SimpleMod
     ];
     internal static List<Type> RossetaDebugCardTypes = [
         typeof(SpellDrawTest),
-        typeof(DebugLearnAllSpells)
+        typeof(DebugLearnAllSpells),
+        typeof(DebugLearnCard)
     ];
     
     internal static IEnumerable<Type> RossetaCardTypes =
@@ -66,39 +69,27 @@ internal class ModEntry : SimpleMod
             .Concat(RossetaSpecialCardTypes)
             .Concat(RossetaDebugCardTypes);
     
-    internal static List<Type> RossetaFireSpellCardTypes = [
-        typeof(FireFlash),
-        typeof(FireryCrystals)
-    ];
-    
-    internal static List<Type> RossetaStarterFireSpellCardTypes = [
-        typeof(FireBolt)
-    ];
-    
-    internal static List<Type> RossetaIceSpellCardTypes = [
+    internal static List<Type> RossetaCommonSpellCardTypes = [
         typeof(IceBolt),
-        typeof(ConjureIceTea),
-        typeof(IceShield)
-    ];
-    
-    internal static List<Type> RossetaAirSpellCardTypes = [
+        typeof(IceShield),
+        typeof(FireBolt),
+        typeof(FireryCrystals),
         typeof(ShockWave),
-        typeof(Fakeout)
-    ];
-    
-    internal static List<Type> RossetaStarterAirSpellCardTypes = [
         typeof(AirDash)
     ];
     
-    internal static List<Type> RossetaAcidSpellCardTypes = [
+    internal static List<Type> RossetaUncommonSpellCardTypes = [
+        typeof(ConjureIceTea),
         typeof(AcidSplash),
         typeof(DragonArmor),
-        typeof(CurePoison)
+        typeof(CurePoison),
+        typeof(Fakeout),
     ];
     
-    internal static List<Type> RossetaSpecialSpellCardTypes = [
-        typeof(FireBall),
+    internal static List<Type> RossetaRareSpellCardTypes = [
         typeof(FreezeRay),
+        typeof(FireFlash),
+        typeof(FireBall),
         typeof(AirSuperDash)
     ];
     
@@ -107,13 +98,9 @@ internal class ModEntry : SimpleMod
     ];
 
     internal static IEnumerable<Type> RossetaSpellCardTypes =
-        RossetaFireSpellCardTypes
-            .Concat(RossetaStarterFireSpellCardTypes)
-            .Concat(RossetaIceSpellCardTypes)
-            .Concat(RossetaAirSpellCardTypes)
-            .Concat(RossetaStarterAirSpellCardTypes)
-            .Concat(RossetaAcidSpellCardTypes)
-            .Concat(RossetaSpecialSpellCardTypes)
+        RossetaCommonSpellCardTypes
+            .Concat(RossetaUncommonSpellCardTypes)
+            .Concat(RossetaRareSpellCardTypes)
             .Concat(RossetaDebugSpellCardTypes);
     
     internal static List<Type> RossetaCommonArtifacts = [
@@ -145,6 +132,7 @@ internal class ModEntry : SimpleMod
         Instance = this;
         Harmony = new Harmony("Sniperninh.Rosseta");
         
+        ALearnSpell.ApplyPatches(Harmony);
         /*
          * Some mods provide an API, which can be requested from the ModRegistry.
          * The following is an example of a required dependency - the code would have unexpected errors if Kokoro was not present.

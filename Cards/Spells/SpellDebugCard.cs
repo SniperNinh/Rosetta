@@ -7,7 +7,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class SpellDebugCard : Card, IRegisterable
+public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 

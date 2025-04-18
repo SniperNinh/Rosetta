@@ -3,12 +3,11 @@ using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
-using Rosseta.Artifacts;
-using System.Linq;
+using Rosseta.Actions;
 
 namespace Rosseta.Cards.Rosseta;
 
-public class DebugLearnAllSpells : Card, IRegisterable
+public class SpellSheet : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -20,29 +19,25 @@ public class DebugLearnAllSpells : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DebugLearnAllSpells", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellSheet", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
 
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        List<Card> cards = new List<Card>();
-        List<CardAction> actions = new List<CardAction>();
-
-        if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
-        {
-            foreach (var card in spellBook.UnLearnedSpells.ToList())
+        return
+        [
+            new ALearnSpell()
             {
-                spellBook.LearnedSpells.Add(card);
-                spellBook.UnLearnedSpells.Remove(card);
+                Amount = 3,
+                battleType = BattleType.Normal
             }
-        }
-        return actions;
+        ];
     }
 
     public override CardData GetData(State state)

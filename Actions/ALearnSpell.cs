@@ -10,11 +10,13 @@ namespace Rosseta.Actions
     public sealed class ALearnSpell : CardAction
     {
         public bool CanSkip { get; set; } = true;
+        
+        public int Amount = 3;
+        
+        private static Rand rng = new Rand();
 
-        public int amount = 3;
-
-        private static Random rng = new Random();
-
+        public BattleType battleType = BattleType.Normal;
+        
         internal static void ApplyPatches(Harmony harmony)
         {
             harmony.Patch(
@@ -22,126 +24,86 @@ namespace Rosseta.Actions
                 postfix: new HarmonyMethod(typeof(ALearnSpell), nameof(CardReward_TakeCard_Postfix))
             );
         }
-
+        
         public override Route? BeginWithRoute(G g, State s, Combat c)
         {
             timer = 0;
-            List<Card> Cards = new List<Card>();
-            foreach (var artifact in g.state.EnumerateAllArtifacts())
+            
+            List<Card> cards = new List<Card>();
+            
+            if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
             {
-                if (artifact is SpellBook spellBook)
-                {
-                    Cards = spellBook.UnLearnedAcidSpells;
-                    Cards.AddRange(spellBook.UnLearnedFireSpells);
-                    Cards.AddRange(spellBook.UnLearnedAirSpells);
-                    Cards.AddRange(spellBook.UnLearnedSpecialSpells);
-                    Cards.AddRange(spellBook.UnLearnedIceSpells);
-                }
+                cards = spellBook.UnLearnedSpells;
+                if (Amount > spellBook.UnLearnedSpells.Count) Amount = spellBook.UnLearnedSpells.Count;
             }
-            List<Card> randomized = Cards.OrderBy(_ => rng.Next()).ToList();
-            ModEntry.Instance.Logger.LogInformation(randomized.Count().ToString());
+            
+            if (Amount <= 0) return null;
+            
             List<Card> options = new List<Card>();
-
-            if(amount > randomized.Count())
+            
+            int num1 = 100;
+            int num2 = 0;
+            
+            while (options.Count < Amount && num2++ < num1) 
             {
-                amount = randomized.Count();
+                var card = cards[rng.NextInt() % cards.Count];
+                
+                Rarity rarity = CardReward.GetRandomRarity(rng, battleType);
+                
+                CardMeta meta = card.GetMeta();
+                
+                if (meta.rarity != rarity) continue;
+                if (card is IIsDebugSpell) continue;
+                if (options.Contains(card)) continue;
+                
+                options.Add(card);
             }
-
-            for (int i = 0; i < amount ; i++)
-            {
-                options.Add(randomized[i].CopyWithNewId());
-            }
-
+            
+            
             return new LearnSpell
             {
-                cards = options.Select(C =>
+                cards = options.Select(card =>
                 {
-                    C.drawAnim = 1;
-                    C.flipAnim = 1;
-                    return C;
+                    card.drawAnim = 1;
+                    card.flipAnim = 1;
+                    return card.CopyWithNewId();
                 }).ToList(),
                 canSkip = CanSkip,
             };
         }
-
+        
         public override List<Tooltip> GetTooltips(State s)
-            => [
+            =>
+            [
                 new TTGlossary("action.cardOffering")
             ];
-
+        
         private static void CardReward_TakeCard_Postfix(CardReward __instance, G g, Card card)
         {
             if (__instance is not LearnSpell custom)
-                return;
-
-            foreach (var artifact in g.state.EnumerateAllArtifacts())
             {
-                if (artifact is SpellBook spellBook)
-                {
-                    
-                    if (ModEntry.RossetaFireSpellCardTypes.Contains(card.GetType()))
-                    {
-                        spellBook.LearnedFireSpells.Add(card);
-                        for (int i = 0; i < spellBook.UnLearnedFireSpells.Count; i++)
-                        {
-                            if (spellBook.UnLearnedFireSpells.ElementAt(i).GetType() == card.GetType())
-                            {
-                                spellBook.UnLearnedFireSpells.RemoveAt(i); break;
-                            }
-                        }
-                    }
-                    if (ModEntry.RossetaAcidSpellCardTypes.Contains(card.GetType())) 
-                    {
-                        spellBook.LearnedAcidSpells.Add(card);
-                        for (int i = 0; i < spellBook.UnLearnedAcidSpells.Count; i++)
-                        {
-                            if (spellBook.UnLearnedAcidSpells.ElementAt(i).GetType() == card.GetType())
-                            {
-                                spellBook.UnLearnedAcidSpells.RemoveAt(i); break;
-                            }
-                        }
-                    }
-                    if (ModEntry.RossetaAirSpellCardTypes.Contains(card.GetType())) 
-                    {
-                        spellBook.LearnedAirSpells.Add(card);
-                        for (int i = 0; i < spellBook.UnLearnedAirSpells.Count; i++)
-                        {
-                            if (spellBook.UnLearnedAirSpells.ElementAt(i).GetType() == card.GetType())
-                            {
-                                spellBook.UnLearnedAirSpells.RemoveAt(i); break;
-                            }
-                        }
-                    }
-                    if (ModEntry.RossetaIceSpellCardTypes.Contains(card.GetType())) 
-                    {
-                        spellBook.LearnedIceSpells.Add(card);
-                        for (int i = 0; i < spellBook.UnLearnedIceSpells.Count; i++)
-                        {
-                            if (spellBook.UnLearnedIceSpells.ElementAt(i).GetType() == card.GetType())
-                            {
-                                spellBook.UnLearnedIceSpells.RemoveAt(i); break;
-                            }
-                        }
-                    }
-                    if (ModEntry.RossetaSpecialSpellCardTypes.Contains(card.GetType())) 
-                    {
-                        spellBook.LearnedSpecialSpells.Add(card);
-                        for (int i = 0; i < spellBook.UnLearnedSpecialSpells.Count; i++)
-                        {
-                            if (spellBook.UnLearnedSpecialSpells.ElementAt(i).GetType() == card.GetType())
-                            {
-                                spellBook.UnLearnedSpecialSpells.RemoveAt(i);
-                                break;
-                            }
-                        }
-                    }
-                }
+                return;
             }
             
+            if (g.state.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
+            {
+                spellBook.LearnedSpells.Add(card);
+                for (int i = 0; i < spellBook.UnLearnedSpells.Count; i++)
+                {
+                    if (spellBook.UnLearnedSpells.ElementAt(i).GetType() == card.GetType())
+                    {
+                        spellBook.UnLearnedSpells.RemoveAt(i); break;
+                    }
+                }
+                ModEntry.Instance.Logger.LogInformation("updated spellbook.LearnedSpells, it is now " + spellBook.LearnedSpells.Count);
+                ModEntry.Instance.Logger.LogInformation("updated spellbook.UnLearnedSpells, it is now " + spellBook.UnLearnedSpells.Count);
+            }
         }
-        public sealed class LearnSpell : CardReward
-        {
-
-        }
+        
+    }
+    
+    public sealed class LearnSpell : CardReward
+    {
+        
     }
 }

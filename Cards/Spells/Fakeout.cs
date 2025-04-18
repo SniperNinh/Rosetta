@@ -8,7 +8,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Spells;
 
-public class Fakeout : Card, IRegisterable
+public class Fakeout : Card, IRegisterable, IAirCard
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -21,7 +21,7 @@ public class Fakeout : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaSpellDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
