@@ -22,7 +22,6 @@ public class DrawAcidSpell : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.uncommon,
-                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DrawAcidSpell", "name"]).Localize,

@@ -3,15 +3,14 @@ using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
-using Rosseta.Artifacts;
-using System.Linq;
+using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Rosseta;
 
-public class DebugLearnAllSpells : Card, IRegisterable
+public class Brooooom : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
-
+    
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -24,32 +23,32 @@ public class DebugLearnAllSpells : Card, IRegisterable
                 dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DebugLearnAllSpells", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Brooooom", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
-
+    
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        List<Card> cards = new List<Card>();
-        List<CardAction> actions = new List<CardAction>();
-
-        if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
-        {
-            foreach (var card in spellBook.UnLearnedSpells.ToList())
+        return
+        [
+            new AMove()
             {
-                spellBook.LearnedSpells.Add(card);
-                spellBook.UnLearnedSpells.Remove(card);
+                dir = 3,
+                targetPlayer = s.ship.isPlayerShip
             }
-        }
-        return actions;
+        ];
     }
-
+    
     public override CardData GetData(State state)
     {
         return new CardData
         {
-            cost = 1
+            cost = 0,
+            temporary = true,
+            singleUse = true,
+            retain = true,
+            flippable = true
         };
     }
 }

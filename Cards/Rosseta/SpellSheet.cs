@@ -20,7 +20,6 @@ public class SpellSheet : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.uncommon,
-                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellSheet", "name"]).Localize,
@@ -44,7 +43,9 @@ public class SpellSheet : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 2,
+            singleUse = true,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "SpellSheet", "desc"]))
         };
     }
 }

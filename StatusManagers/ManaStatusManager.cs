@@ -23,7 +23,7 @@ internal sealed class ManaStatusManager : IRegisterable
                 isGood = true,
                 affectedByTimestop = true,
                 color = new("23EEB6"),
-                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png")).Sprite,
+                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/ManaStatus.png")).Sprite,
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["status", "Mana", "name"]).Localize,
             Description = ModEntry.Instance.AnyLocalizations.Bind(["status", "Mana", "desc"]).Localize

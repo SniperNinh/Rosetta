@@ -33,13 +33,13 @@ public class BottleThrow : Card, IRegisterable
         [
             new AAttack()
             {
-                damage = 1,
+                damage = 2,
                 targetPlayer = !s.ship.isPlayerShip
             },
             new AStatus()
             {
                 status = ManaSpillStatusManager.ManaSpillStatus.Status,
-                statusAmount = 3,
+                statusAmount = 1,
                 targetPlayer = s.ship.isPlayerShip
             }
         ];

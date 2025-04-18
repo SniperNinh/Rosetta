@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Artifacts;
+using System.Linq;
 
-namespace Rosseta.Cards;
+namespace Rosseta.Cards.DebugCards;
 
-public class ShardShield : Card, IRegisterable
+public class DebugLearnAllSpells : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
-    
+
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -20,29 +21,29 @@ public class ShardShield : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.common,
+                dontOffer = true,
+                unreleased = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "ShardShield", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DebugLearnAllSpells", "name"]).Localize,
+            // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
 
-    /*
-     * Some cards have actions that don't just differ by number on upgrade.
-     * In these cases, a switch statement may be used.
-     * It is more verbose, but allows for precisely describing what each upgrade's actions are.
-     */
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        return
-        [
-            new AStatus
+        List<Card> cards = new List<Card>();
+        List<CardAction> actions = new List<CardAction>();
+
+        if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
+        {
+            foreach (var card in spellBook.UnLearnedSpells.ToList())
             {
-                status = Status.shield,
-                statusAmount = 1,
-                targetPlayer = s.ship.isPlayerShip,
-                shardcost = 1
+                spellBook.LearnedSpells.Add(card);
+                spellBook.UnLearnedSpells.Remove(card);
             }
-        ];
+        }
+        return actions;
     }
 
     public override CardData GetData(State state)

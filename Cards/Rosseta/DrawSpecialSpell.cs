@@ -22,7 +22,6 @@ public class DrawSpecialSpell : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.rare,
-                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DrawSpecialSpell", "name"]).Localize,

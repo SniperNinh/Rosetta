@@ -3,11 +3,12 @@ using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Actions;
 using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards.Spells;
+namespace Rosseta.Cards.DebugCards;
 
-public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
+public class DebugLearnCard : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -15,16 +16,16 @@ public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
-            
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
             Meta = new CardMeta
             {
-                deck = ModEntry.Instance.RossetaSpellDeck.Deck,
+                deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.common,
                 dontOffer = true,
+                unreleased = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellDebugCard", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DebugLearnCard", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -33,7 +34,10 @@ public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
     {
         return
         [
-            
+            new ALearnSpell
+            {
+                Amount = 3
+            }
         ];
     }
 
@@ -42,9 +46,8 @@ public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
         return new CardData
         {
             cost = 0,
-            exhaust = true,
-            temporary = true,
-            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "SpellDebugCard", "desc"]))
+            infinite = true,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "DebugLearnCard", "desc"]))
         };
     }
 }

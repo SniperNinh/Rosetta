@@ -55,7 +55,7 @@ public class AirDash : Card, IRegisterable, IAirCard, IIsStarterSpell
                 new AStatus()
                 {
                     status = Status.evade,
-                    statusAmount = 1,
+                    statusAmount = 2,
                     targetPlayer = s.ship.isPlayerShip
                 }).AsCardAction
         ];

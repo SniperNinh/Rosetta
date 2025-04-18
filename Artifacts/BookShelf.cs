@@ -1,6 +1,16 @@
+using System.Collections.Generic;
 using System.Reflection;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Actions;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using Rosseta.External;
+using Nanoray.PluginManager;
+using Nickel;
+using Rosseta.Actions;
+using Rosseta.Artifacts;
 
 namespace Rosseta.Artifacts;
 
@@ -36,12 +46,29 @@ public class BookShelf : Artifact, IRegisterable
      */
     public override void OnCombatStart(State state, Combat combat)
     {
-        combat.Queue(new AStatus
+        List<CardAction> actions = new List<CardAction>();
+        
+        if (state.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
         {
-            targetPlayer = true,
-            status = Status.shield,
-            statusAmount = 5,
-            artifactPulse = Key() // This makes it so that when this action occurs, this artifact is pulsed with a white aura.
-        });
+            actions.Add(
+                new ASpecificCardTypeOffering()
+                {
+                    Cards = GetSpellTypeCardsFromSpellBook(spellBook),
+                    Destination = CardDestination.Hand
+                }
+            );
+        }
+        
+        combat.QueueImmediate(actions);
+    }
+    private List<Card> GetSpellTypeCardsFromSpellBook(SpellBook spellBook)
+    {
+        List<Card> elementCardList = new List<Card>();
+        foreach (var elementCard in spellBook.LearnedSpells)
+        {
+            if (elementCard is ISpecialCard) continue;
+            elementCardList.Add(elementCard);
+        }
+        return elementCardList.Count > 0 ? elementCardList : spellBook.DebugSpells;
     }
 }

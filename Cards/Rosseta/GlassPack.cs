@@ -20,7 +20,6 @@ public class GlassPack : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.uncommon,
-                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "GlassPack", "name"]).Localize,
@@ -55,7 +54,8 @@ public class GlassPack : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 1,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "GlassPack", "desc"]))
         };
     }
 }

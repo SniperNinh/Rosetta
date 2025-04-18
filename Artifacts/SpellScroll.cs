@@ -1,6 +1,8 @@
 using System.Reflection;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Actions;
+using Rosseta.Cards.Rosseta;
 
 namespace Rosseta.Artifacts;
 
@@ -34,14 +36,12 @@ public class SpellScroll : Artifact, IRegisterable
      * Unlike Cards, Artifacts have no required methods. Implement the ones you need, and leave the rest unimplemented.
      * By default, Artifacts have everything implemented with methods that do nothing, so there is no need to call the super.
      */
-    public override void OnCombatStart(State state, Combat combat)
+    public override void OnReceiveArtifact(State state)
     {
-        combat.Queue(new AStatus
+        state.rewardsQueue.Add(new AAddCard()
         {
-            targetPlayer = true,
-            status = Status.shield,
-            statusAmount = 5,
-            artifactPulse = Key() // This makes it so that when this action occurs, this artifact is pulsed with a white aura.
+            card = new SpellSheet(),
+            amount = 3
         });
     }
 }

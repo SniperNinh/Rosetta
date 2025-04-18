@@ -54,6 +54,7 @@ public class FireBall : Card, IRegisterable, IFireCard, ISpecialCard
             {
                 status = ManaStatusManager.ManaStatus.Status,
                 statusAmount = 0,
+                mode = AStatusMode.Set,
                 targetPlayer = s.ship.isPlayerShip
             }
         ];

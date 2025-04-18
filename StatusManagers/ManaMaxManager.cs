@@ -20,7 +20,7 @@ internal sealed class ManaMaxStatusManager : IRegisterable
                 isGood = true,
                 affectedByTimestop = true,
                 color = new("23EEB6"),
-                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png")).Sprite,
+                icon = ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/MaxManaStatus.png")).Sprite,
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["status", "ManaMax", "name"]).Localize,
             Description = ModEntry.Instance.AnyLocalizations.Bind(["status", "ManaMax", "desc"]).Localize

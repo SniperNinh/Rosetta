@@ -21,7 +21,7 @@ internal sealed class ManaSpillStatusManager : IRegisterable
                     color = new("23EEB6"),
                     icon = ModEntry.Instance.Helper.Content.Sprites
                         .RegisterSprite(
-                            ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/Artifact/LexiconA.png"))
+                            ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/ManaSpillStatus.png"))
                         .Sprite,
                 },
                 Name = ModEntry.Instance.AnyLocalizations.Bind(["status", "ManaSpill", "name"]).Localize,

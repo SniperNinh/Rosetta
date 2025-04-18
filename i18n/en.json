@@ -1,7 +1,11 @@
 ﻿{
     "character": {
         "name": "Rosseta",
-        "desc": "PIKACHU"
+        "desc": "Books bigger sister, uses mana to power spells"
+    },
+    "SpellDeck": {
+        "name": "Rossetas Spells",
+        "desc": "The spells used by Rosseta"
     },
     "status": {
         "Mana": {
@@ -19,37 +23,20 @@
         "ManaMax": {
             "name": "Mana Max",
             "desc": "Base limit of 3. When reaching the limit, spend the required <c=status>KNOWLEDGE</c> to gain 1 <c=status>POWERDRIVE</c> and 1 <c=status>LESSON</c>. Excess <c=status>KNOWLEDGE</c> is not lost."
-        },
-        "Stir": {
-            "name": "Stir",
-            "desc": "Increase the limit of <c=status>KNOWLEDGE</c> by {0}."
         }
     },
     "action": {
     },
     "card": {
-        "CrystalSpell": {
-            "name": "Crystal Spell",
-            "desc": "X = <c=status>max shard</c>, Lose all <c=status>shard</c>. for each ({{amount_color}}{{ amount }}</c>), attack for X (<c=attack>{{ damage }}</c>) dmg."
+        "BottleRepair": {
+            "name": "Bottle Repair"
         },
-        "ShardShield": {
-            "name": "Shard Shield"
-        },
-        "BundledCrystals": {
-            "name": "Bundled Crystals",
-            "desc": "Put 3 <c=card>Crystal Shard</c>s in your draw pile"
-        },
-        "SpellDrawTest": {
-            "name": "Spell Draw Test",
-            "desc": "draw a card from the spellbook to your hand"
+        "DistilledMana": {
+            "name": "Distilled Mana"
         },
         "DrawFireSpell": {
             "name": "Draw Fire Spell",
             "desc": "draw a <c=card>Fire Spell</c> from the spellbook to your hand"
-        },
-        "DrawAcidSpell": {
-            "name": "Draw Acid Spell",
-            "desc": "draw a <c=card>Acid Spell</c> from the spellbook to your hand"
         },
         "DrawAirSpell": {
             "name": "Draw Air Spell",
@@ -59,15 +46,136 @@
             "name": "Draw Ice Spell",
             "desc": "draw a <c=card>Ice Spell</c> from the spellbook to your hand"
         },
+        "Equivalence": {
+            "name": "Equivalence"
+        },
+        "ManaFlask": {
+            "name": "Mana Flask",
+            "desc": "Put a <c=card>Mana Bottle</c> in your hand"
+        },
+        "ManaShield": {
+            "name": "Mana Shield"
+        },
+        "WandStab": {
+            "name": "Wand Stab"
+        },
+        "BottleThrow": {
+            "name": "Bottle Throw"
+        },
+        "CrystallineBottle": {
+            "name": "Crystalline Bottle"
+        },
+        "DrawAcidSpell": {
+            "name": "Draw Acid Spell",
+            "desc": "draw a <c=card>Acid Spell</c> from the spellbook to your hand"
+        },
+        "GlassPack": {
+            "name": "Glass Pack",
+            "desc": "Put a <c=card>Mana Bottle</c> and a <c=card>Crystal Shard</c> in your hand, gain 1 <c=status>heat</c>"
+        },
+        "SpellSheet": {
+            "name": "Spell Sheet",
+            "desc": "Learn 1 new <c=card>spell</c> and add it to your hand"
+        },
+        "Stir": {
+            "name": "Stir"
+        },
+        "DrawSpecialSpell": {
+            "name": "Draw Special Spell",
+            "desc": "draw a <c=card>Special Spell</c> from the spellbook to your hand"
+        },
+        "ManaBottle": {
+            "name": "Mana Bottle"
+        },
+        "Brooooom": {
+            "name": "Brooooom"
+        },
+        "SpellDrawTest": {
+            "name": "Spell Draw Test",
+            "desc": "draw a card from the spellbook to your hand"
+        },
+        "DebugLearnAllSpells": {
+            "name": "Debug Learn All Spells",
+            "desc": ""
+        },
+        "DebugLearnCard": {
+            "name": "Debug Learn Card",
+            "desc": ""
+        },
+        "IceBolt": {
+            "name": "Ice Bolt"
+        },
+        "IceShield": {
+            "name": "Ice Shield"
+        },
+        "FireBolt": {
+            "name": "Fire Bolt"
+        },
+        "FireryCrystals": {
+            "name": "Firery Crystals"
+        },
+        "ShockWave": {
+            "name": "Shock Wave"
+        },
+        "AirDash": {
+            "name": "Air Dash"
+        },
+        "ConjureIceTea": {
+            "name": "Conjure Ice Tea"
+        },
+        "AcidSplash": {
+            "name": "Acid Splash"
+        },
+        "DragonArmor": {
+            "name": "Dragon Armor"
+        },
+        "CurePoison": {
+            "name": "Cure Poison"
+        },
+        "Fakeout": {
+            "name": "Fakeout"
+        },
+        "FreezeRay": {
+            "name": "Freeze Ray"
+        },
+        "FireFlash": {
+            "name": "Fire Flash"
+        },
+        "FireBall": {
+            "name": "Fireball"
+        },
+        "AirSuperDash": {
+            "name": "Air Super Dash"
+        },
         "SpellDebugCard": {
             "name": "Spell Debug Card",
             "desc": "A spell for testing purposes, has no actions"
         }
     },
     "artifact": {
-        "CrystalPouch": {
-            "name": "CRYSTAL POUCH",
-            "desc": "Every <c=keyword>10th</c> time you play a <c=card>Crystal Shard</c>, gain 1 <c=status>MAX SHARD</c>."
+        "Broom": {
+            "name": "Broom",
+            "desc": ""
+        },
+        "ManaShelf": {
+            "name": "Mana Shelf",
+            "desc": ""
+        },
+        "Cauldron": {
+            "name": "Cauldron",
+            "desc": ""
+        },
+        "SpellBook": {
+            "name": "SpellBook",
+            "desc": ""
+        },
+        "SpellScroll": {
+            "name": "Spell Scroll",
+            "desc": ""
+        },
+        "BookShelf": {
+            "name": "BookShelf",
+            "desc": ""
         }
     }
 }

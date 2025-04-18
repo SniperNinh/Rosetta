@@ -7,7 +7,7 @@ using Nickel;
 using Rosseta.Actions;
 using Rosseta.Artifacts;
 
-namespace Rosseta.Cards.Rosseta;
+namespace Rosseta.Cards.DebugCards;
 
 public class SpellDrawTest : Card, IRegisterable
 {
@@ -23,6 +23,7 @@ public class SpellDrawTest : Card, IRegisterable
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.common,
                 dontOffer = true,
+                unreleased = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellDrawTest", "name"]).Localize,

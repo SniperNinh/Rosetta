@@ -8,9 +8,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using Rosseta.Actions;
 using Rosseta.Artifacts;
-using Rosseta.Cards;
 using Rosseta.Cards.Rosseta;
 using Rosseta.Cards.Spells;
+using Rosseta.Cards.DebugCards;
 using Rosseta.External;
 using Rosseta.StatusManagers;
 
@@ -32,29 +32,30 @@ internal class ModEntry : SimpleMod
      * In theory only one collection could be used, containing all registrable types, but it is seperated this way for ease of organization.
      */
     internal static List<Type> RossetaCommonCardTypes = [
-        typeof(ShardShield),
         typeof(BottleRepair),
         typeof(DistilledMana),
+        typeof(DrawFireSpell),
+        typeof(DrawIceSpell),
+        typeof(DrawAirSpell),
         typeof(Equivalence),
         typeof(ManaFlask),
         typeof(ManaShield),
-        typeof(DrawFireSpell),
-        typeof(DrawIceSpell),
-        typeof(DrawAirSpell)
+        typeof(WandStab)
     ];
     internal static List<Type> RossetaUncommonCardTypes = [
-        typeof(BundledCrystals),
-        typeof(DrawAcidSpell),
-        typeof(Stir),
         typeof(BottleThrow),
-        typeof(SpellSheet)
+        typeof(CrystallineBottle),
+        typeof(DrawAcidSpell),
+        typeof(GlassPack), 
+        typeof(SpellSheet),
+        typeof(Stir)
     ];
     internal static List<Type> RossetaRareCardTypes = [
-        typeof(CrystalSpell),
         typeof(DrawSpecialSpell)
     ];
     internal static List<Type> RossetaSpecialCardTypes = [
-        typeof(ManaBottle)
+        typeof(ManaBottle),
+        typeof(Brooooom)
     ];
     internal static List<Type> RossetaDebugCardTypes = [
         typeof(SpellDrawTest),
@@ -105,13 +106,14 @@ internal class ModEntry : SimpleMod
     
     internal static List<Type> RossetaCommonArtifacts = [
         typeof(Broom),
-        typeof(ManaShelf),
-        typeof(BookShelf)
+        typeof(ManaShelf)
     ];
+    
     internal static List<Type> RossetaBossArtifacts = [
         typeof(Cauldron),
         typeof(SpellBook),
-        typeof(SpellScroll)
+        typeof(SpellScroll),
+        typeof(BookShelf)
     ];
     internal static IEnumerable<Type> RossetaArtifactTypes =
         RossetaCommonArtifacts
@@ -121,7 +123,6 @@ internal class ModEntry : SimpleMod
         .. RossetaCardTypes,
         .. RossetaSpellCardTypes,
         .. RossetaArtifactTypes,
-        typeof(BasicStatusManager),
         typeof(ManaStatusManager),
         typeof(ManaSpillStatusManager),
         typeof(ManaMaxStatusManager)
@@ -186,7 +187,7 @@ internal class ModEntry : SimpleMod
 
             DefaultCardArt = StableSpr.cards_colorless,
             BorderSprite = RegisterSprite(package, "assets/frame_dave.png").Sprite,
-            Name = AnyLocalizations.Bind(["character", "name"]).Localize
+            Name = AnyLocalizations.Bind(["SpellDeck", "name"]).Localize
         });
 
         /*
@@ -229,9 +230,8 @@ internal class ModEntry : SimpleMod
             Starters = new StarterDeck
             {
                 cards = [
-                    new ShardShield(),
-                    new BundledCrystals(),
-                    new CrystalSpell()
+                    new WandStab(),
+                    new DrawAirSpell()
                 ],
                 /*
                  * Some characters have starting artifacts, in addition to starting cards.

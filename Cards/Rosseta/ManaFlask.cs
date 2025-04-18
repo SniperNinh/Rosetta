@@ -45,7 +45,8 @@ public class ManaFlask : Card, IRegisterable
         return new CardData
         {
             cost = 1,
-            exhaust = true
+            exhaust = true,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "ManaFlask", "desc"]))
         };
     }
 }

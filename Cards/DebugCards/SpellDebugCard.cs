@@ -5,9 +5,9 @@ using Nanoray.PluginManager;
 using Nickel;
 using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards.Rosseta;
+namespace Rosseta.Cards.DebugCards;
 
-public class pikachu : Card, IRegisterable
+public class SpellDebugCard : Card, IRegisterable, IIsDebugSpell
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -15,15 +15,17 @@ public class pikachu : Card, IRegisterable
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
+            
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
             Meta = new CardMeta
             {
-                deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.uncommon,
+                deck = ModEntry.Instance.RossetaSpellDeck.Deck,
+                rarity = Rarity.common,
                 dontOffer = true,
+                unreleased = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "pikachu", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SpellDebugCard", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -32,12 +34,7 @@ public class pikachu : Card, IRegisterable
     {
         return
         [
-            new AStatus()
-            {
-                status = ManaStatusManager.ManaStatus.Status,
-                statusAmount = 1,
-                targetPlayer = s.ship.isPlayerShip
-            }
+            
         ];
     }
 
@@ -45,7 +42,10 @@ public class pikachu : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 0,
+            exhaust = true,
+            temporary = true,
+            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "SpellDebugCard", "desc"]))
         };
     }
 }

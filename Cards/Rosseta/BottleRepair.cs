@@ -45,8 +45,7 @@ public class BottleRepair : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1,
-            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "BottleRepair", "desc"]))
+            cost = 1
         };
     }
 }

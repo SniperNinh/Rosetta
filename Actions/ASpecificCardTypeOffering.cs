@@ -12,7 +12,7 @@ namespace Rosseta.Actions
     public sealed class ASpecificCardTypeOffering : CardAction
     {
         public List<Card> Cards { get; set; } = [];
-        public bool CanSkip { get; set; } = false;
+        public bool CanSkip { get; set; } = true;
         public CardDestination Destination { get; set; } = CardDestination.Hand;
         
         internal static void ApplyPatches(Harmony harmony)

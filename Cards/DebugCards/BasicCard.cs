@@ -5,7 +5,7 @@ using Nanoray.PluginManager;
 using Nickel;
 using Rosseta.StatusManagers;
 
-namespace Rosseta.Cards.Rosseta;
+namespace Rosseta.Cards.DebugCards;
 
 public class BasicCard : Card, IRegisterable
 {
@@ -21,6 +21,7 @@ public class BasicCard : Card, IRegisterable
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.common,
                 dontOffer = true,
+                unreleased = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BasicCard", "name"]).Localize,

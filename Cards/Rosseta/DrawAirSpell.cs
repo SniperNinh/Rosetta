@@ -22,7 +22,6 @@ public class DrawAirSpell : Card, IRegisterable
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
                 rarity = Rarity.common,
-                dontOffer = true,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DrawAirSpell", "name"]).Localize,
@@ -35,6 +34,7 @@ public class DrawAirSpell : Card, IRegisterable
         
         List<CardAction> actions = new List<CardAction>();
         if (s.EnumerateAllArtifacts().OfType<SpellBook>().FirstOrDefault() is { } spellBook)
+        {
             actions.Add(
                 new ASpecificCardTypeOffering()
                 {
@@ -42,7 +42,7 @@ public class DrawAirSpell : Card, IRegisterable
                     Destination = CardDestination.Hand
                 }
             );
-        
+        }
         return actions;
     }
 

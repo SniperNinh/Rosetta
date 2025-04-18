@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Nanoray.PluginManager;
 using Nickel;
+using Rosseta.Cards.Rosseta;
 
 namespace Rosseta.Artifacts;
 
@@ -11,9 +12,6 @@ namespace Rosseta.Artifacts;
  */
 public class Broom : Artifact, IRegisterable
 {
-    
-    public int Counter = 0;
-    
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Artifacts.RegisterArtifact(new ArtifactConfiguration
@@ -31,37 +29,13 @@ public class Broom : Artifact, IRegisterable
         });
     }
     
-    public override void OnPlayerPlayCard(
-        int energyCost,
-        Deck deck,
-        Card card,
-        State state,
-        Combat combat,
-        int handPosition,
-        int handCount)
+    public override void OnCombatStart(State state, Combat combat)
     {
-        if (!(card.GetType() == new ShardCard().GetType()))
-            return;
-        
-        Counter++;
-        
-        if (Counter < 10)
-            return;
-        
-        Counter = 0;
-        combat.Queue(new AStatus()
+        combat.Queue(new AAddCard()
         {
-            targetPlayer = true,
-            status = Status.maxShard,
-            statusAmount = 1,
+            card = new Brooooom(),
+            destination = CardDestination.Hand,
             artifactPulse = Key()
         });
     }
-
-    public override void OnCombatEnd(State state)
-    {
-        Counter = 0;
-    }
-
-    public override int? GetDisplayNumber(State s) => new int?(Counter);
 }
