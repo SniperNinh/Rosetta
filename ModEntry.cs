@@ -25,7 +25,16 @@ internal class ModEntry : SimpleMod
     internal IDeckEntry RossetaDeck;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
-
+    internal Spr RossetaCommonOverlay;
+    internal Spr RossetaUncommonOverlay;
+    internal Spr RossetaRareOverlay;
+    internal Spr RossetaSpecialOverlay;
+    internal Spr RossetaSpellCommonOverlay;
+    internal Spr RossetaSpellUncommonOverlay;
+    internal Spr RossetaSpellRareOverlay;
+    internal Spr RossetaSpellSpecialOverlay;
+    
+    
     /*
      * The following lists contain references to all types that will be registered to the game.
      * All cards and artifacts must be registered before they may be used in the game.
@@ -128,10 +137,14 @@ internal class ModEntry : SimpleMod
         typeof(ManaMaxStatusManager)
     ];
     
+    
+    
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
         Instance = this;
         Harmony = new Harmony("Sniperninh.Rosseta");
+        
+        
         
         
         
@@ -150,7 +163,9 @@ internal class ModEntry : SimpleMod
         Localizations = new MissingPlaceholderLocalizationProvider<IReadOnlyList<string>>(
             new CurrentLocaleOrEnglishLocalizationProvider<IReadOnlyList<string>>(AnyLocalizations)
         );
-
+        
+        
+        
         /*
          * A deck only defines how cards should be grouped, for things such as codex sorting and Second Opinions.
          * A character must be defined with a deck to allow the cards to be obtainable as a character's cards.
@@ -168,14 +183,22 @@ internal class ModEntry : SimpleMod
 
                 titleColor = new Color("000000")
             },
-
+            
             DefaultCardArt = StableSpr.cards_colorless,
-            BorderSprite = RegisterSprite(package, "assets/Border_Rosseta.png").Sprite,
+            BorderSprite = RegisterSprite(package, "assets/RossetaDeck/Border_Rosseta.png").Sprite,
             Name = AnyLocalizations.Bind(["character", "name"]).Localize
         });
         
+        RossetaCommonOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Common.png").Sprite;
+        RossetaUncommonOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Uncommon.png").Sprite;
+        RossetaRareOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Rare.png").Sprite;
+        RossetaSpecialOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Special.png").Sprite;
+        
+        
+        
         RossetaSpellDeck = helper.Content.Decks.RegisterDeck("RossetaSpells", new DeckConfiguration
         {
+            
             Definition = new DeckDef
             {
                 /*
@@ -184,13 +207,18 @@ internal class ModEntry : SimpleMod
                  * If this deck is given to a playable character, their name will be this color, and their mini will have this color as their border.
                  */
                 color = new Color("999999"),
-
                 titleColor = new Color("000000")
             },
             DefaultCardArt = StableSpr.cards_colorless,
-            BorderSprite = RegisterSprite(package, "assets/Border_Rosseta.png").Sprite,
+            BorderSprite = RegisterSprite(package, "assets/SpellDeck/Border_Rosseta_Spell.png").Sprite,
             Name = AnyLocalizations.Bind(["SpellDeck", "name"]).Localize
         });
+        
+        RossetaSpellCommonOverlay = RegisterSprite(package, "assets/SpellDeck/Overlay_Rosseta_Spell_Common.png").Sprite;
+        RossetaSpellUncommonOverlay = RegisterSprite(package, "assets/SpellDeck/Overlay_Rosseta_Spell_Uncommon.png").Sprite;
+        RossetaSpellRareOverlay = RegisterSprite(package, "assets/SpellDeck/Overlay_Rosseta_Spell_Rare.png").Sprite;
+        RossetaSpellSpecialOverlay = RegisterSprite(package, "assets/SpellDeck/Overlay_Rosseta_Spell_Special.png").Sprite;
+        
         
         /*
          * All the IRegisterable types placed into the static lists at the start of the class are initialized here.
@@ -228,7 +256,7 @@ internal class ModEntry : SimpleMod
         helper.Content.Characters.V2.RegisterPlayableCharacter("Rosseta", new PlayableCharacterConfigurationV2
         {
             Deck = RossetaDeck.Deck,
-            BorderSprite = RegisterSprite(package, "assets/char_frame_dave.png").Sprite,
+            BorderSprite = RegisterSprite(package, "assets/char_frame_Rosseta.png").Sprite,
             Starters = new StarterDeck
             {
                 cards = [

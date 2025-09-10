@@ -69,6 +69,7 @@ public class ConjureIceTea : Card, IRegisterable, IIceCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellUncommonOverlay,
             cost = 0,
             exhaust = true,
             floppable = true,

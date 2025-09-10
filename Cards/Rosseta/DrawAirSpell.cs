@@ -50,7 +50,7 @@ public class DrawAirSpell : Card, IRegisterable
     {
         return new CardData
         {
-            artOverlay = ModEntry.RegisterSprite(ModEntry.Instance.Package, "assets/Border_Common_Rosseta.png").Sprite,
+            artOverlay = ModEntry.Instance.RossetaCommonOverlay,
             cost = 1,
             description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "DrawAirSpell", "desc"]))
         };

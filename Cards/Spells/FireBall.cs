@@ -64,6 +64,7 @@ public class FireBall : Card, IRegisterable, IFireCard, ISpecialCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellRareOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

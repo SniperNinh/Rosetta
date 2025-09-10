@@ -57,6 +57,7 @@ public class AcidSplash : Card, IRegisterable, IAcidCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellUncommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

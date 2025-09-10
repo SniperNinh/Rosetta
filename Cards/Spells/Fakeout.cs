@@ -57,6 +57,7 @@ public class Fakeout : Card, IRegisterable, IAirCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellUncommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

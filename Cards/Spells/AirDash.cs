@@ -65,6 +65,7 @@ public class AirDash : Card, IRegisterable, IAirCard, IIsStarterSpell
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellCommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

@@ -65,6 +65,7 @@ public class FireBolt : Card, IRegisterable, IFireCard, IIsStarterSpell
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellCommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

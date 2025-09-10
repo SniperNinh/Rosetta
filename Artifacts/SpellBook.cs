@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nanoray.PluginManager;
-
 namespace Rosseta.Artifacts;
 
 /*

@@ -49,7 +49,7 @@ public class DrawSpecialSpell : Card, IRegisterable
     {
         return new CardData
         {
-            artOverlay = ModEntry.RegisterSprite(ModEntry.Instance.Package, "assets/Border_Rare_Rosseta.png").Sprite,
+            artOverlay = ModEntry.Instance.RossetaRareOverlay,
             cost = 1,
             description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "DrawSpecialSpell", "desc"]))
         };

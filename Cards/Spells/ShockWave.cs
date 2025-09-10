@@ -56,6 +56,7 @@ public class ShockWave : Card, IRegisterable, IAirCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellCommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

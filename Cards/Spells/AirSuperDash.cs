@@ -69,6 +69,7 @@ public class AirSuperDash : Card, IRegisterable, IAirCard, ISpecialCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellRareOverlay,
             cost = 0,
             exhaust = true,
             floppable = true,

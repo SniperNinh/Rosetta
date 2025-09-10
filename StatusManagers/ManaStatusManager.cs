@@ -29,6 +29,12 @@ internal sealed class ManaStatusManager : IRegisterable
             Description = ModEntry.Instance.AnyLocalizations.Bind(["status", "Mana", "desc"]).Localize
         });
         
+        ModEntry.Instance.KokoroApi.ActionCosts.RegisterStatusResourceCostIcon(
+            ManaStatus.Status,
+            ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/ManaCost.png")).Sprite,
+            ModEntry.Instance.Helper.Content.Sprites.RegisterSprite(ModEntry.Instance.Package.PackageRoot.GetRelativeFile("assets/ManaCostUnmet.png")).Sprite,
+            1);
+        
         ModEntry.Instance.KokoroApi.StatusRendering.RegisterHook(new StatusRenderingHook());
         
         ModEntry.Instance.KokoroApi.StatusLogic.RegisterHook(new StatusLogicHook());

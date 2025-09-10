@@ -67,6 +67,7 @@ public class FireryCrystals : Card, IRegisterable, IFireCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellCommonOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

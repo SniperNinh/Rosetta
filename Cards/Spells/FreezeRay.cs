@@ -57,6 +57,7 @@ public class FreezeRay : Card, IRegisterable, IIceCard, ISpecialCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellRareOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

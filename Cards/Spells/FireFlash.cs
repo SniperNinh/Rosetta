@@ -70,6 +70,7 @@ public class FireFlash : Card, IRegisterable, IFireCard
     {
         return new CardData
         {
+            artOverlay = ModEntry.Instance.RossetaSpellRareOverlay,
             cost = 0,
             exhaust = true,
             temporary = true

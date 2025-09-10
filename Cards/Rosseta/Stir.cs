@@ -50,7 +50,7 @@ public class Stir : Card, IRegisterable
     {
         return new CardData
         {
-            artOverlay = ModEntry.RegisterSprite(ModEntry.Instance.Package, "assets/Border_UnCommon_Rosseta.png").Sprite,
+            artOverlay = ModEntry.Instance.RossetaUncommonOverlay,
             cost = 1
         };
     }
