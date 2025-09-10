@@ -34,7 +34,6 @@ internal class ModEntry : SimpleMod
     internal Spr RossetaSpellRareOverlay;
     internal Spr RossetaSpellSpecialOverlay;
     
-    
     /*
      * The following lists contain references to all types that will be registered to the game.
      * All cards and artifacts must be registered before they may be used in the game.
@@ -137,16 +136,10 @@ internal class ModEntry : SimpleMod
         typeof(ManaMaxStatusManager)
     ];
     
-    
-    
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
         Instance = this;
         Harmony = new Harmony("Sniperninh.Rosseta");
-        
-        
-        
-        
         
         ALearnSpell.ApplyPatches(Harmony);
         /*
@@ -163,8 +156,6 @@ internal class ModEntry : SimpleMod
         Localizations = new MissingPlaceholderLocalizationProvider<IReadOnlyList<string>>(
             new CurrentLocaleOrEnglishLocalizationProvider<IReadOnlyList<string>>(AnyLocalizations)
         );
-        
-        
         
         /*
          * A deck only defines how cards should be grouped, for things such as codex sorting and Second Opinions.
@@ -193,7 +184,6 @@ internal class ModEntry : SimpleMod
         RossetaUncommonOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Uncommon.png").Sprite;
         RossetaRareOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Rare.png").Sprite;
         RossetaSpecialOverlay = RegisterSprite(package, "assets/RossetaDeck/Overlay_Rosseta_Special.png").Sprite;
-        
         
         
         RossetaSpellDeck = helper.Content.Decks.RegisterDeck("RossetaSpells", new DeckConfiguration
