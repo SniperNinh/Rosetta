@@ -1,7 +1,8 @@
-using HarmonyLib;
 using Nanoray.PluginManager;
 using Nickel;
+using HarmonyLib;
 using System.Reflection;
+using Rosseta.External;
 
 namespace Rosseta.StatusManagers;
 
@@ -32,6 +33,8 @@ internal sealed class ManaSpillStatusManager : IRegisterable
             original: AccessTools.DeclaredMethod(typeof(AOverheat), nameof(AOverheat.Begin)),
             postfix: new HarmonyMethod(MethodBase.GetCurrentMethod()!.DeclaringType!, nameof(AOverheat_Begin_Postfix))
         );
+        
+        ModEntry.Instance.KokoroApi.StatusLogic.RegisterHook(new StatusLogicHook());
     }
 
     /*
@@ -53,5 +56,44 @@ internal sealed class ManaSpillStatusManager : IRegisterable
 
         ModEntry.Instance.Helper.ModData.CopyAllModData(__instance, action);
         c.QueueImmediate(action);
+    }
+    private sealed class StatusLogicHook : IKokoroApi.IV2.IStatusLogicApi.IHook
+    {
+        public bool HandleStatusTurnAutoStep(IKokoroApi.IV2.IStatusLogicApi.IHook.IHandleStatusTurnAutoStepArgs args)
+        {
+            if (args.Status != ManaSpillStatus.Status)
+                return false;
+            if (args.Timing != IKokoroApi.IV2.IStatusLogicApi.StatusTurnTriggerTiming.TurnStart)
+                return false;
+            
+            
+            if (args.Ship.Get(ManaStatusManager.ManaStatus.Status) > 0)
+            {
+                args.Combat.QueueImmediate(
+                    new AStatus
+                    {
+                        status = ManaStatusManager.ManaStatus.Status,
+                        statusAmount = -args.Ship.Get(ManaSpillStatus.Status),
+                        targetPlayer = args.Ship.isPlayerShip,
+                        timer = 0
+                    }
+                );
+            }
+            
+            if (args.Amount == 0)
+            {
+                args.Combat.QueueImmediate(
+                    new AStatus
+                    {
+                        status = ManaSpillStatusManager.ManaSpillStatus.Status,
+                        statusAmount = -1,
+                        targetPlayer = args.Ship.isPlayerShip,
+                        timer = 0
+                    }
+                );
+            }
+            
+            return false;
+        }
     }
 }

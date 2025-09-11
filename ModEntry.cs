@@ -171,7 +171,6 @@ internal class ModEntry : SimpleMod
                  * If this deck is given to a playable character, their name will be this color, and their mini will have this color as their border.
                  */
                 color = new Color("999999"),
-
                 titleColor = new Color("000000")
             },
             
@@ -200,6 +199,7 @@ internal class ModEntry : SimpleMod
                 titleColor = new Color("000000")
             },
             DefaultCardArt = StableSpr.cards_colorless,
+            ShineColorOverride = args => DB.decks[args.Card.GetMeta().deck].color.normalize().gain(1), /* TODO Working on removing card tint */
             BorderSprite = RegisterSprite(package, "assets/SpellDeck/Border_Rosseta_Spell.png").Sprite,
             Name = AnyLocalizations.Bind(["SpellDeck", "name"]).Localize
         });
