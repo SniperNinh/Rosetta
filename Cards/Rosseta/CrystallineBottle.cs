@@ -19,7 +19,7 @@ public class CrystallineBottle : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.uncommon,
+                rarity = Rarity.common,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CrystallineBottle", "name"]).Localize,
@@ -47,11 +47,15 @@ public class CrystallineBottle : Card, IRegisterable
     }
 
     public override CardData GetData(State state)
-    {
-        return new CardData
         {
-            artOverlay = ModEntry.Instance.RossetaUncommonOverlay,
-            cost = 1
-        };
-    }
+            return new CardData
+            {
+                artOverlay = ModEntry.Instance.RossetaCommonOverlay,
+                cost = upgrade switch
+                {
+                    Upgrade.B => 0,
+                    _ => 1
+                }
+            };
+        }
 }

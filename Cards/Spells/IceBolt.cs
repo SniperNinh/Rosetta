@@ -38,12 +38,6 @@ public class IceBolt : Card, IRegisterable, IIceCard
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
                     3),
-                ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
-            ).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
                 new AAttack()
                 {
                     damage = 2,

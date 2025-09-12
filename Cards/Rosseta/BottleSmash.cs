@@ -7,7 +7,7 @@ using Rosseta.StatusManagers;
 
 namespace Rosseta.Cards.Rosseta;
 
-public class ManaShield : Card, IRegisterable
+public class BottleSmash : Card, IRegisterable
 {
     private static IKokoroApi.IV2.IConditionalApi Conditional => ModEntry.Instance.KokoroApi.Conditional;
 
@@ -19,10 +19,10 @@ public class ManaShield : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.RossetaDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "ManaShield", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "BottleSmash", "name"]).Localize,
             // Art = ModEntry.RegisterSprite(package, "assets/Cards/Ponder.png").Sprite
         });
     }
@@ -32,48 +32,36 @@ public class ManaShield : Card, IRegisterable
         {
             Upgrade.A =>
             [
-                new AStatus()
+                new AAttack()
                 {
-                    status = Status.shield,
-                    statusAmount = 2,
-                    targetPlayer = s.ship.isPlayerShip,
-                    shardcost = 1
+                    damage = 3,
+                    targetPlayer = !s.ship.isPlayerShip
                 },
                 new AStatus()
                 {
-                    status = ManaStatusManager.ManaStatus.Status,
-                    statusAmount = 4,
-                    targetPlayer = s.ship.isPlayerShip,
-                    shardcost = 1
-                }
-            ],
-            Upgrade.B =>
-            [
-                new AStatus()
-                {
-                    status = Status.shield,
-                    statusAmount = 2,
-                    targetPlayer = s.ship.isPlayerShip
-                },
-                new AStatus()
-                {
-                    status = ManaStatusManager.ManaStatus.Status,
-                    statusAmount = 2,
-                    targetPlayer = s.ship.isPlayerShip
-                }
-            ],
-            _ =>
-            [
-                new AStatus()
-                {
-                    status = Status.shield,
+                    status = ManaSpillStatusManager.ManaSpillStatus.Status,
                     statusAmount = 1,
                     targetPlayer = s.ship.isPlayerShip
                 },
                 new AStatus()
                 {
                     status = ManaStatusManager.ManaStatus.Status,
-                    statusAmount = 2,
+                    statusAmount = 0,
+                    mode = AStatusMode.Set,
+                    targetPlayer = s.ship.isPlayerShip
+                }
+            ],
+            _ =>
+            [
+                new AAttack()
+                {
+                    damage = 2,
+                    targetPlayer = !s.ship.isPlayerShip
+                },
+                new AStatus()
+                {
+                    status = ManaSpillStatusManager.ManaSpillStatus.Status,
+                    statusAmount = 1,
                     targetPlayer = s.ship.isPlayerShip
                 }
             ]
@@ -83,8 +71,8 @@ public class ManaShield : Card, IRegisterable
     {
         return new CardData
         {
-            artOverlay = ModEntry.Instance.RossetaCommonOverlay,
-            cost = 1
+            artOverlay = ModEntry.Instance.RossetaUncommonOverlay,
+            cost = 0
         };
     }
 }

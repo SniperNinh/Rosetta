@@ -38,12 +38,6 @@ public class FreezeRay : Card, IRegisterable, IIceCard, ISpecialCard
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
                     7),
-                ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
-            ).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
                 new AStatus()
                 {
                     status = Status.lockdown,

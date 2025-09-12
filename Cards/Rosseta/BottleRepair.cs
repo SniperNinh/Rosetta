@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Rosseta.External;
 using Nanoray.PluginManager;
@@ -28,18 +29,56 @@ public class BottleRepair : Card, IRegisterable
     }
 
     public override List<CardAction> GetActions(State s, Combat c)
-    {
-        return
-        [
-            new AStatus()
-            {
-                status = ManaSpillStatusManager.ManaSpillStatus.Status,
-                statusAmount = -1,
-                targetPlayer = s.ship.isPlayerShip,
-                shardcost = 2
-            }
-        ];
-    }
+        => upgrade switch
+        {
+            Upgrade.A =>
+            [
+                new AStatus()
+                {
+                    status = ManaSpillStatusManager.ManaSpillStatus.Status,
+                    statusAmount = -1,
+                    targetPlayer = s.ship.isPlayerShip,
+                    shardcost = 1
+                }
+            ],
+            Upgrade.B =>
+            [
+                ModEntry.Instance.KokoroApi.ContinueStop
+                    .MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid)
+                    .AsCardAction,
+                ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
+                (
+                    IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
+                    triggerGuid,
+                    new AStatus()
+                    {
+                        status = ManaSpillStatusManager.ManaSpillStatus.Status,
+                        statusAmount = -1,
+                        targetPlayer = s.ship.isPlayerShip,
+                        shardcost = 2
+                    }).AsCardAction,
+                ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
+                (
+                    IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
+                    triggerGuid,
+                    new AStatus()
+                    {
+                        status = ManaStatusManager.ManaStatus.Status,
+                        statusAmount = +2,
+                        targetPlayer = s.ship.isPlayerShip,
+                        shardcost = 2
+                    }).AsCardAction
+            ],
+            _ => [
+                new AStatus()
+                {
+                    status = ManaSpillStatusManager.ManaSpillStatus.Status,
+                    statusAmount = -1,
+                    targetPlayer = s.ship.isPlayerShip,
+                    shardcost = 2
+                }
+            ]
+        };
 
     public override CardData GetData(State state)
     {

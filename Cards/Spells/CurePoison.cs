@@ -38,12 +38,6 @@ public class CurePoison : Card, IRegisterable, IAcidCard
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
                     4),
-                ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
-            ).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
                 new AStatus()
                 {
                     status = Status.corrode,

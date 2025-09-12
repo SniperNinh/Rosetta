@@ -41,6 +41,7 @@ internal class ModEntry : SimpleMod
      */
     internal static List<Type> RossetaCommonCardTypes = [
         typeof(BottleRepair),
+        typeof(CrystallineBottle),
         typeof(DistilledMana),
         typeof(DrawFireSpell),
         typeof(DrawIceSpell),
@@ -52,7 +53,6 @@ internal class ModEntry : SimpleMod
     ];
     internal static List<Type> RossetaUncommonCardTypes = [
         typeof(BottleThrow),
-        typeof(CrystallineBottle),
         typeof(DrawAcidSpell),
         typeof(GlassPack), 
         typeof(SpellSheet),
@@ -199,7 +199,7 @@ internal class ModEntry : SimpleMod
                 titleColor = new Color("000000")
             },
             DefaultCardArt = StableSpr.cards_colorless,
-            ShineColorOverride = args => DB.decks[args.Card.GetMeta().deck].color.normalize().gain(1), /* TODO Working on removing card tint */
+            ShineColorOverride = args => new Color("000000"),
             BorderSprite = RegisterSprite(package, "assets/SpellDeck/Border_Rosseta_Spell.png").Sprite,
             Name = AnyLocalizations.Bind(["SpellDeck", "name"]).Localize
         });

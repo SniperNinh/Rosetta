@@ -28,25 +28,65 @@ public class Equivalence : Card, IRegisterable
     }
 
     public override List<CardAction> GetActions(State s, Combat c)
-    {
-        return
-        [
-            new AStatus()
-            {
-                status = ManaStatusManager.ManaStatus.Status,
-                statusAmount = 2,
-                targetPlayer = s.ship.isPlayerShip,
-                shardcost = 1
-            }
-        ];
-    }
+        => upgrade switch
+        {
+            Upgrade.A =>
+            [
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 2,
+                    targetPlayer = s.ship.isPlayerShip,
+                    shardcost = 1,
+                    disabled = flipped
+                },
+                ModEntry.Instance.KokoroApi.ActionCosts.MakeCostAction(
+                    ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
+                        ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
+                        2),
+                    new AStatus()
+                    {
+                        status = Status.shard,
+                        statusAmount = 1,
+                        targetPlayer = s.ship.isPlayerShip,
+                        disabled = !flipped
+                    }).AsCardAction
+            ],
+            Upgrade.B =>
+            [
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 2,
+                    targetPlayer = s.ship.isPlayerShip,
+                    shardcost = 1
+                }
+            ],
+            _ =>
+            [
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 3,
+                    targetPlayer = s.ship.isPlayerShip,
+                    shardcost = 1
+                }
+            ]
+        };
 
     public override CardData GetData(State state)
-    {
-        return new CardData
+        => new()
         {
             artOverlay = ModEntry.Instance.RossetaCommonOverlay,
-            cost = 0
+            cost = upgrade switch
+            {
+                Upgrade.B => 0,
+                _ => 1
+            },
+            floppable = upgrade switch
+            {
+                Upgrade.A => true,
+                _ => false
+            }
         };
-    }
 }

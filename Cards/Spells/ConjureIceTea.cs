@@ -38,12 +38,6 @@ public class ConjureIceTea : Card, IRegisterable, IIceCard
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
                     4),
-                ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
-            ).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
                 new AStatus()
                 {
                     status = Status.heat,
@@ -51,10 +45,10 @@ public class ConjureIceTea : Card, IRegisterable, IIceCard
                     targetPlayer = s.ship.isPlayerShip,
                     disabled = flipped
                 }).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
+            ModEntry.Instance.KokoroApi.ActionCosts.MakeCostAction(
+                ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
+                    ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
+                    4),
                 new AStatus()
                 {
                     status = Status.serenity,

@@ -33,21 +33,37 @@ public class ManaFlask : Card, IRegisterable
         [
             new AAddCard()
             {
-                destination = CardDestination.Hand,
+                destination = upgrade switch
+                {
+                    Upgrade.B => CardDestination.Discard,
+                    _ => CardDestination.Hand,
+                },
                 card = new ManaBottle(),
-                amount = 1
+                amount = upgrade switch
+                {
+                    Upgrade.B => 2,
+                    _ => 1
+                }
+                
             }
         ];
     }
 
-    public override CardData GetData(State state)
-    {
-        return new CardData
+    public override CardData GetData(State state) 
+        => upgrade switch
         {
-            artOverlay = ModEntry.Instance.RossetaCommonOverlay,
-            cost = 1,
-            exhaust = true,
-            description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "ManaFlask", "desc"]))
+            Upgrade.A => new CardData()
+            {
+                artOverlay = ModEntry.Instance.RossetaCommonOverlay,
+                cost = 3,
+                description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "ManaFlask", "desc"]))
+            },
+            _ => new CardData()
+            {
+                artOverlay = ModEntry.Instance.RossetaCommonOverlay,
+                cost = 1,
+                exhaust = true,
+                description = string.Format(ModEntry.Instance.Localizations.Localize(["card", "ManaFlask", "desc"]))
+            }
         };
-    }
 }

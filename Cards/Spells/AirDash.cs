@@ -46,12 +46,6 @@ public class AirDash : Card, IRegisterable, IAirCard, IIsStarterSpell
                 ModEntry.Instance.KokoroApi.ActionCosts.MakeResourceCost(
                     ModEntry.Instance.KokoroApi.ActionCosts.MakeStatusResource(ManaStatusManager.ManaStatus.Status),
                     2),
-                ModEntry.Instance.KokoroApi.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out Guid triggerGuid).AsCardAction
-            ).AsCardAction,
-            ModEntry.Instance.KokoroApi.ContinueStop.MakeFlaggedAction
-            (
-                IKokoroApi.IV2.IContinueStopApi.ActionType.Continue,
-                triggerGuid,
                 new AStatus()
                 {
                     status = Status.evade,

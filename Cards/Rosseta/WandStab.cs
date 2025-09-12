@@ -28,29 +28,62 @@ public class WandStab : Card, IRegisterable
     }
 
     public override List<CardAction> GetActions(State s, Combat c)
-    {
-        return
-        [
-            new AAttack()
-            {
-                damage = 1,
-                targetPlayer = !s.ship.isPlayerShip
-            },
-            new AStatus()
-            {
-                status = ManaStatusManager.ManaStatus.Status,
-                statusAmount = 1,
-                targetPlayer = s.ship.isPlayerShip
-            }
-        ];
-    }
+        => upgrade switch
+        {
+            Upgrade.A =>
+            [
+                new AAttack()
+                {
+                    damage = 2,
+                    targetPlayer = !s.ship.isPlayerShip
+                },
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 1,
+                    targetPlayer = s.ship.isPlayerShip
+                }
+            ],
+            Upgrade.B =>
+            [
+                new AAttack()
+                {
+                    damage = 1,
+                    targetPlayer = !s.ship.isPlayerShip
+                },
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 1,
+                    targetPlayer = s.ship.isPlayerShip
+                }
+            ],
+            _ =>
+            [
+                new AAttack()
+                {
+                    damage = 1,
+                    targetPlayer = !s.ship.isPlayerShip
+                },
+                new AStatus()
+                {
+                    status = ManaStatusManager.ManaStatus.Status,
+                    statusAmount = 2,
+                    targetPlayer = s.ship.isPlayerShip
+                }
+            ]
+        };
 
     public override CardData GetData(State state)
     {
         return new CardData
         {
             artOverlay = ModEntry.Instance.RossetaCommonOverlay,
-            cost = 1
+            cost = upgrade switch
+            {
+                Upgrade.B => 0,
+                _ => 1
+            }
         };
     }
 }
